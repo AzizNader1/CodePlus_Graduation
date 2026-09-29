@@ -1,0 +1,251 @@
+@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SkillSwap | Peer-to-Peer Skill Exchange</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 & Bootstrap Icons -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Theme CSS matching Figma Design -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-custom py-2">
+            <div class="container-xl">
+                <!-- Brand Logo -->
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                    <span class="brand-badge"><i class="bi bi-arrow-left-right"></i></span>
+                    <span class="brand-text">SkillSwap</span>
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3 gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom d-flex align-items-center gap-1" asp-controller="Discover" asp-action="Index">
+                                <i class="bi bi-compass"></i> Explore
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom d-flex align-items-center gap-1" asp-controller="Discover" asp-action="Matches">
+                                <i class="bi bi-stars text-warning"></i> Matches
+                            </a>
+                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom d-flex align-items-center gap-1" asp-controller="SwapRequests" asp-action="Index">
+                                    <i class="bi bi-arrow-repeat"></i> Swaps
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom d-flex align-items-center gap-1" asp-controller="Sessions" asp-action="Index">
+                                    <i class="bi bi-camera-video"></i> Sessions
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom d-flex align-items-center gap-1" asp-controller="Chat" asp-action="Index">
+                                    <i class="bi bi-chat-dots"></i> Chat
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom d-flex align-items-center gap-1" asp-controller="Payments" asp-action="Index">
+                                    <i class="bi bi-wallet2"></i> Wallet
+                                </a>
+                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link nav-link-custom d-flex align-items-center gap-1 text-danger fw-bold" asp-controller="Admin" asp-action="Index">
+                                        <i class="bi bi-shield-check"></i> Admin
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <!-- User Actions -->
+                    <div class="d-flex align-items-center gap-2">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <!-- Notification Center Icon -->
+                            <a class="btn btn-light rounded-circle p-2 position-relative text-muted" asp-controller="Notifications" asp-action="Index" title="Notifications">
+                                <i class="bi bi-bell fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
+                            </a>
+
+                            <!-- User Profile Dropdown -->
+                            <div class="dropdown">
+                                <button class="btn btn-light rounded-pill d-flex align-items-center gap-2 py-1 pe-3 ps-1 border" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @{
+                                        var avatar = User.FindFirst("AvatarUrl")?.Value;
+                                        var name = User.FindFirst(ClaimTypes.Name)?.Value ?? "User";
+                                        var initial = !string.IsNullOrEmpty(name) ? name[0].ToString().ToUpper() : "U";
+                                    }
+                                    @if (!string.IsNullOrEmpty(avatar))
+                                    {
+                                        <img src="http://localhost:5200@(avatar)" alt="@name" class="avatar-circle" style="width:32px; height:32px;" onerror="this.src='/images/default-avatar.png';">
+                                    }
+                                    else
+                                    {
+                                        <div class="avatar-placeholder" style="width:32px; height:32px; font-size:0.8rem;">@initial</div>
+                                    }
+                                    <span class="fw-semibold small text-truncate" style="max-width: 120px;">@name</span>
+                                    <i class="bi bi-chevron-down small text-muted"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 mt-2 p-2">
+                                    <li>
+                                        <div class="px-3 py-2 border-bottom mb-1">
+                                            <p class="mb-0 fw-bold">@name</p>
+                                            <small class="text-muted">@User.FindFirst(ClaimTypes.Email)?.Value</small>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2" asp-controller="Profile" asp-action="Index">
+                                            <i class="bi bi-person me-2 text-primary"></i> My Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2" asp-controller="Profile" asp-action="Edit">
+                                            <i class="bi bi-gear me-2 text-secondary"></i> Edit Settings
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2" asp-controller="Payments" asp-action="Index">
+                                            <i class="bi bi-credit-card me-2 text-success"></i> Wallet & Subscription
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider my-1"></li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2 text-danger fw-semibold" asp-controller="Auth" asp-action="Logout">
+                                            <i class="bi bi-box-arrow-right me-2"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn btn-secondary-custom" asp-controller="Auth" asp-action="Login">Sign In</a>
+                            <a class="btn btn-primary-custom" asp-controller="Auth" asp-action="Register">Join Free</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Global Toast / TempData Alerts -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="container-xl mt-3">
+            <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-check-circle-fill fs-5 text-success"></i>
+                <div>@TempData["Success"]</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="container-xl mt-3">
+            <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger"></i>
+                <div>@TempData["Error"]</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+
+    <!-- Main Content Area -->
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- Footer matching Figma design -->
+    <footer class="footer-custom mt-auto">
+        <div class="container-xl">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="brand-badge"><i class="bi bi-arrow-left-right"></i></span>
+                        <span class="brand-text text-white" style="-webkit-text-fill-color: white;">SkillSwap</span>
+                    </div>
+                    <p class="small text-muted mb-4 pe-lg-4">
+                        The peer-to-peer knowledge exchange network where everyone is both teacher and student. Learn new skills, share your expertise, and build meaningful professional relationships.
+                    </p>
+                    <div class="d-flex gap-3 text-muted">
+                        <a href="#" class="footer-link fs-5"><i class="bi bi-github"></i></a>
+                        <a href="#" class="footer-link fs-5"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="footer-link fs-5"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="footer-link fs-5"><i class="bi bi-discord"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-white fw-bold mb-3">Explore</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="footer-link" asp-controller="Discover" asp-action="Index">Categories</a></li>
+                        <li><a class="footer-link" asp-controller="Discover" asp-action="Matches">Skill Matches</a></li>
+                        <li><a class="footer-link" asp-controller="Discover" asp-action="Search">Search Members</a></li>
+                        <li><a class="footer-link" asp-controller="Home" asp-action="Index">Top Swappers</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="text-white fw-bold mb-3">Platform</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a class="footer-link" asp-controller="Home" asp-action="Index">How It Works</a></li>
+                        <li><a class="footer-link" asp-controller="Sessions" asp-action="Index">Live Video Calls</a></li>
+                        <li><a class="footer-link" asp-controller="Payments" asp-action="Index">Wallet & Pro</a></li>
+                        <li><a class="footer-link" asp-controller="SwapRequests" asp-action="Index">Swap Negotiation</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Get Started Today</h6>
+                    <p class="small text-muted mb-3">Join thousands of software engineers, designers, musicians, and language experts sharing skills worldwide.</p>
+                    @if (User.Identity?.IsAuthenticated != true)
+                    {
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-primary-custom btn-sm" asp-controller="Auth" asp-action="Register">Create Account</a>
+                            <a class="btn btn-outline-light btn-sm rounded-3" asp-controller="Auth" asp-action="Login">Sign In</a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="pt-4 border-top border-secondary border-opacity-25 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+                <small class="text-muted">&copy; @DateTime.UtcNow.Year SkillSwap Platform. All rights reserved.</small>
+                <div class="d-flex gap-3">
+                    <a class="footer-link small mb-0" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                    <a class="footer-link small mb-0" asp-controller="Home" asp-action="Privacy">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

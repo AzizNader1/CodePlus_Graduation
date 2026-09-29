@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SkillSwap.Api/SkillSwap.Api.csproj" />
+  <Project Path="SkillSwap.Application/SkillSwap.Application.csproj" />
+  <Project Path="SkillSwap.Domain/SkillSwap.Domain.csproj" />
+  <Project Path="SkillSwap.Infrastructure/SkillSwap.Infrastructure.csproj" />
+</Solution>

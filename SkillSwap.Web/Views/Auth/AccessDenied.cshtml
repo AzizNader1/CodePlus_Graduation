@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container py-5 my-md-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card card-custom p-5 bg-white border-0 shadow-sm text-center">
+                <div class="rounded-circle bg-danger-subtle text-danger d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-shield-lock-fill fs-1"></i>
+                </div>
+                <h2 class="fw-bold mb-2">Access Denied</h2>
+                <p class="text-muted mb-4">
+                    You do not have the required permissions or administrative privileges to view this protected resource.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                        <i class="bi bi-house me-1"></i> Return Home
+                    </a>
+                    <a asp-controller="Discover" asp-action="Index" class="btn btn-primary-custom rounded-pill px-4">
+                        <i class="bi bi-compass me-1"></i> Discover Swappers
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

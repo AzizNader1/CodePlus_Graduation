@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "SkillSwap.Api\\SkillSwap.Api.csproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "SkillSwap.Web\\SkillSwap.Web.csproj",
+        "Action": "StartWithoutDebugging"
+      }
+    ]
+  }
+]

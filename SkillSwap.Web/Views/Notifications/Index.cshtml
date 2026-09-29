@@ -1,0 +1,67 @@
+@model IReadOnlyCollection<SkillSwap.Application.DTOs.NotificationDTO>
+@{
+    ViewData["Title"] = "Notification Center";
+}
+
+<div class="container-xl py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-custom p-4 bg-white border">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <div>
+                        <h4 class="fw-bold mb-1"><i class="bi bi-bell text-primary me-2"></i>Notifications</h4>
+                        <small class="text-muted">Activity alerts, swap proposal updates, and session reminders.</small>
+                    </div>
+                    @if (Model.Any())
+                    {
+                        <form asp-action="MarkAllAsRead" method="post">
+                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill">
+                                <i class="bi bi-check2-all me-1"></i> Mark All as Read
+                            </button>
+                        </form>
+                    }
+                </div>
+
+                @if (!Model.Any())
+                {
+                    <div class="p-5 text-center bg-light rounded-4">
+                        <i class="bi bi-bell-slash fs-1 text-muted d-block mb-3"></i>
+                        <h5 class="fw-bold mb-1">No notifications found</h5>
+                        <p class="text-muted small mb-0">@(ViewBag.Message ?? "You're all caught up! New proposal alerts and reminders will appear here.")</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex flex-column gap-2">
+                        @foreach (var n in Model)
+                        {
+                            <div class="p-3 rounded-4 border d-flex align-items-start gap-3 @(!n.IsRead ? "bg-primary-subtle border-primary-border" : "bg-light")">
+                                <div class="rounded-circle p-2 d-flex align-items-center justify-content-center @(!n.IsRead ? "bg-primary text-white" : "bg-white text-muted shadow-xs")" style="width:40px; height:40px;">
+                                    <i class="bi bi-bell-fill fs-6"></i>
+                                </div>
+
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="fw-bold mb-0 @(!n.IsRead ? "text-primary" : "")">@n.Title</h6>
+                                        <small class="text-muted" style="font-size:0.75rem;">@n.CreatedAt.ToString("MMM dd, hh:mm tt")</small>
+                                    </div>
+                                    <p class="small text-muted mb-0">@n.Message</p>
+                                </div>
+
+                                @if (!n.IsRead)
+                                {
+                                    <form asp-action="MarkAsRead" method="post">
+                                        <input type="hidden" name="notificationId" value="@n.Id" />
+                                        <button type="submit" class="btn btn-light btn-sm rounded-circle p-1 border text-primary" title="Mark as Read">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

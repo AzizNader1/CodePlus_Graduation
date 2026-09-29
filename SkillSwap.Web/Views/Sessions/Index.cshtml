@@ -1,0 +1,180 @@
+@model List<SkillSwap.Application.DTOs.SwapSessionDTO>
+@{
+    ViewData["Title"] = "My Swap Sessions & Video Calls";
+    var selectedStatus = ViewBag.SelectedStatus as SessionStatus?;
+}
+
+<div class="container-xl py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom gap-2">
+        <div>
+            <h3 class="fw-bold mb-1">Swap Sessions</h3>
+            <p class="text-muted small mb-0">Join video sessions, confirm completions, and review your learning partners.</p>
+        </div>
+        <div class="d-flex flex-wrap gap-1">
+            <a class="btn @(!selectedStatus.HasValue ? "btn-primary-custom" : "btn-light border") btn-sm rounded-pill px-3" asp-action="Index">
+                All
+            </a>
+            @foreach (SessionStatus st in Enum.GetValues(typeof(SessionStatus)))
+            {
+                <a class="btn @(selectedStatus == st ? "btn-primary-custom" : "btn-light border") btn-sm rounded-pill px-3 text-muted" asp-action="Index" asp-route-status="@st">
+                    @st
+                </a>
+            }
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card card-custom p-5 text-center bg-white border max-w-lg mx-auto">
+            <div class="rounded-circle bg-light text-muted d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width:64px; height:64px;">
+                <i class="bi bi-camera-video-off fs-2"></i>
+            </div>
+            <h5 class="fw-bold mb-1">No sessions found</h5>
+            <p class="text-muted small mb-3">@(ViewBag.Message ?? "When a swap proposal is accepted by either party, a session will appear here with a video link.")</p>
+            <div>
+                <a class="btn btn-primary-custom btn-sm rounded-pill" asp-controller="SwapRequests" asp-action="Index">View Proposals</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var session in Model)
+            {
+                <div class="col-lg-6">
+                    <div class="card card-custom p-4 bg-white border h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge-status @session.Status">@session.Status</span>
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i>@session.DurationMinutes mins</small>
+                        </div>
+
+                        <!-- Participants Header -->
+                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-4 mb-3 border">
+                            <div class="d-flex align-items-center gap-2">
+                                @if (!string.IsNullOrEmpty(session.HostAvatarUrl))
+                                {
+                                    <img src="http://localhost:5200@(session.HostAvatarUrl)" alt="@session.HostName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.png';">
+                                }
+                                else
+                                {
+                                    <div class="avatar-placeholder" style="width:40px; height:40px; font-size:0.9rem;">H</div>
+                                }
+                                <div>
+                                    <strong class="d-block small">@session.HostName</strong>
+                                    <small class="text-muted" style="font-size:0.7rem;">Host</small>
+                                </div>
+                            </div>
+
+                            <i class="bi bi-arrow-left-right text-muted"></i>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="text-end">
+                                    <strong class="d-block small">@session.ParticipantName</strong>
+                                    <small class="text-muted" style="font-size:0.7rem;">Participant</small>
+                                </div>
+                                @if (!string.IsNullOrEmpty(session.ParticipantAvatarUrl))
+                                {
+                                    <img src="http://localhost:5200@(session.ParticipantAvatarUrl)" alt="@session.ParticipantName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.png';">
+                                }
+                                else
+                                {
+                                    <div class="avatar-placeholder" style="width:40px; height:40px; font-size:0.9rem;">P</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="small text-muted mb-3">
+                            <div><i class="bi bi-calendar3 text-primary me-2"></i>@session.ScheduledStartTime.ToString("dddd, MMMM dd, yyyy - hh:mm tt")</div>
+                        </div>
+
+                        <!-- Completion Status Pill -->
+                        <div class="d-flex gap-2 small text-muted mb-3 bg-light p-2 rounded-3 border">
+                            <span>
+                                Host Confirmed: 
+                                <i class="bi @(session.HostConfirmedCompleted ? "bi-check-circle-fill text-success" : "bi-dash-circle text-muted")"></i>
+                            </span>
+                            <span class="ms-auto">
+                                Participant Confirmed: 
+                                <i class="bi @(session.ParticipantConfirmedCompleted ? "bi-check-circle-fill text-success" : "bi-dash-circle text-muted")"></i>
+                            </span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-auto pt-3 border-top d-flex flex-wrap gap-2">
+                            @if (session.Status == SessionStatus.Scheduled || session.Status == SessionStatus.InProgress)
+                            {
+                                <a class="btn btn-primary-custom btn-sm flex-grow-1" asp-action="Room" asp-route-sessionId="@session.Id">
+                                    <i class="bi bi-camera-video me-1"></i> Join Video Call
+                                </a>
+
+                                <form asp-action="Complete" method="post">
+                                    <input type="hidden" name="sessionId" value="@session.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm rounded-pill" title="Mark Session Completed">
+                                        <i class="bi bi-check2-circle me-1"></i> Complete
+                                    </button>
+                                </form>
+
+                                <form asp-action="Cancel" method="post" onsubmit="return confirm('Cancel this scheduled session?');">
+                                    <input type="hidden" name="sessionId" value="@session.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
+                                        Cancel
+                                    </button>
+                                </form>
+                            }
+                            else if (session.Status == SessionStatus.Completed)
+                            {
+                                <button type="button" class="btn btn-warning btn-sm text-dark rounded-pill w-100 fw-bold" data-bs-toggle="modal" data-bs-target="#reviewModal-@session.Id">
+                                    <i class="bi bi-star-fill me-1"></i> Leave Review & Rating
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Modal for Completed Sessions -->
+                @if (session.Status == SessionStatus.Completed)
+                {
+                    <div class="modal fade" id="reviewModal-@session.Id" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content rounded-4 border-0 shadow">
+                                <div class="modal-header border-0 pb-0">
+                                    <h5 class="modal-title fw-bold">Rate Your Exchange Partner</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form asp-controller="Reviews" asp-action="Create" method="post">
+                                    <input type="hidden" name="SessionId" value="@session.Id" />
+                                    <input type="hidden" name="PunctualityScore" value="5" />
+                                    <input type="hidden" name="CommunicationScore" value="5" />
+                                    <input type="hidden" name="KnowledgeScore" value="5" />
+                                    <div class="modal-body py-4">
+                                        <p class="text-muted small mb-3">Provide feedback on the knowledge exchange quality and punctuality.</p>
+                                        
+                                        <div class="mb-3 text-center">
+                                            <label class="form-label small fw-bold text-muted d-block">Overall Rating Score</label>
+                                            <select name="OverallRating" class="form-select form-select-lg text-center fw-bold rounded-3">
+                                                <option value="5" selected>⭐⭐⭐⭐⭐ (5/5) - Excellent Exchange</option>
+                                                <option value="4">⭐⭐⭐⭐ (4/5) - Very Good</option>
+                                                <option value="3">⭐⭐⭐ (3/5) - Average</option>
+                                                <option value="2">⭐⭐ (2/5) - Below Average</option>
+                                                <option value="1">⭐ (1/5) - Poor</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-bold text-muted">Written Feedback</label>
+                                            <textarea name="Comment" class="form-control rounded-3" rows="3" placeholder="What did you learn? How helpful was your partner?" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer border-0 pt-0">
+                                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary-custom rounded-pill px-4">Submit Review</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>

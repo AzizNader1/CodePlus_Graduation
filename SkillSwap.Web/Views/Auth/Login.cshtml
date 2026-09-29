@@ -1,0 +1,123 @@
+@model SkillSwap.Application.DTOs.LoginRequest
+@{
+    ViewData["Title"] = "Sign In to SkillSwap";
+}
+
+<div class="container py-5 my-md-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card card-custom p-4 p-md-5 border-0 shadow-lg">
+                <div class="text-center mb-4">
+                    <div class="brand-badge mb-3 mx-auto" style="width:52px; height:52px; border-radius:14px; font-size:1.5rem;">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1">Welcome back</h3>
+                    <p class="text-muted small">Sign in to manage your swaps and continue learning</p>
+                </div>
+
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger rounded-4 small p-3 border-0 mb-4">
+                        <div asp-validation-summary="All" class="mb-0"></div>
+                    </div>
+                }
+
+                <form asp-action="Login" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Email" id="loginEmail" type="email" class="form-control bg-light border-start-0 py-2" placeholder="name@example.com" required autofocus />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label small fw-bold text-muted mb-0">Password</label>
+                            <a asp-action="ForgotPassword" class="small text-primary text-decoration-none">Forgot password?</a>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-lock"></i></span>
+                            <input asp-for="Password" id="loginPassword" type="password" class="form-control bg-light border-start-0 py-2" placeholder="••••••••" required />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                        <label class="form-check-label small text-muted" for="rememberMe">Remember this browser</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2 mb-3">Sign In</button>
+                </form>
+
+                <!-- Quick Test Credentials Picker -->
+                <div class="p-3 bg-light rounded-4 mb-4 border border-dashed">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small fw-bold text-muted text-uppercase" style="font-size:0.75rem;"><i class="bi bi-lightning-charge text-warning"></i> Quick Demo Logins</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-white btn-sm border rounded-pill small py-1 px-3 shadow-xs" onclick="fillCreds('alice@skillswap.app', 'Password@123')">
+                            <span class="fw-bold">Alice</span> (.NET Dev)
+                        </button>
+                        <button type="button" class="btn btn-white btn-sm border rounded-pill small py-1 px-3 shadow-xs" onclick="fillCreds('bob@skillswap.app', 'Password@123')">
+                            <span class="fw-bold">Bob</span> (Spanish)
+                        </button>
+                        <button type="button" class="btn btn-white btn-sm border rounded-pill small py-1 px-3 shadow-xs text-danger" onclick="fillCreds('admin@skillswap.app', 'Admin@123456')">
+                            <span class="fw-bold">Admin</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="position-relative text-center my-3">
+                    <hr class="text-muted">
+                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 small text-muted">or continue with</span>
+                </div>
+
+                <div class="row g-2 mb-4">
+                    <div class="col-4">
+                        <form asp-action="ExternalLogin" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                            <input type="hidden" name="provider" value="Google" />
+                            <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1" type="submit" id="btnGoogleLogin" title="Sign in with Google">
+                                <i class="bi bi-google text-danger"></i>
+                                <span class="small fw-semibold d-none d-sm-inline">Google</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-4">
+                        <form asp-action="ExternalLogin" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                            <input type="hidden" name="provider" value="Apple" />
+                            <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1" type="submit" id="btnAppleLogin" title="Sign in with Apple">
+                                <i class="bi bi-apple text-dark"></i>
+                                <span class="small fw-semibold d-none d-sm-inline">Apple</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-4">
+                        <form asp-action="ExternalLogin" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                            <input type="hidden" name="provider" value="Facebook" />
+                            <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1" type="submit" id="btnFacebookLogin" title="Sign in with Facebook">
+                                <i class="bi bi-facebook text-primary"></i>
+                                <span class="small fw-semibold d-none d-sm-inline">Facebook</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <p class="text-center small text-muted mb-0">
+                    Don't have an account? <a asp-action="Register" class="fw-bold text-primary text-decoration-none">Join free today</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function fillCreds(email, password) {
+            document.getElementById('loginEmail').value = email;
+            document.getElementById('loginPassword').value = password;
+        }
+    </script>
+}

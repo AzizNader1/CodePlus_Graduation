@@ -1,0 +1,17 @@
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\bin\Debug\net8.0\SkillSwap.Infrastructure.deps.json
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\bin\Debug\net8.0\SkillSwap.Infrastructure.dll
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\bin\Debug\net8.0\SkillSwap.Infrastructure.pdb
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\bin\Debug\net8.0\SkillSwap.Application.dll
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\bin\Debug\net8.0\SkillSwap.Domain.dll
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\bin\Debug\net8.0\SkillSwap.Application.pdb
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\bin\Debug\net8.0\SkillSwap.Domain.pdb
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwap.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwap.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwap.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwap.Infrastructure.AssemblyInfo.cs
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwap.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwa.3668A284.Up2Date
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwap.Infrastructure.dll
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\refint\SkillSwap.Infrastructure.dll
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\SkillSwap.Infrastructure.pdb
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\CodePlus_Graduation\SkillSwap.Infrastructure\obj\Debug\net8.0\ref\SkillSwap.Infrastructure.dll

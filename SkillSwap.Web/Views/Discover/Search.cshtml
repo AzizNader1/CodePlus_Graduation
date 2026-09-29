@@ -1,0 +1,182 @@
+@model SkillSwap.Application.Common.Models.PaginatedList<SkillSwap.Application.DTOs.UserSkillDTO>
+@{
+    ViewData["Title"] = "Search Skills & Swappers";
+    var categories = ViewBag.Categories as List<CategoryDTO> ?? new List<CategoryDTO>();
+    var selectedCat = ViewBag.SelectedCategoryId as Guid?;
+    var selectedLevel = ViewBag.SelectedLevel as ProficiencyLevel?;
+}
+
+<div class="container-xl py-5">
+    <div class="row g-4">
+        <!-- Sidebar Filters Column -->
+        <div class="col-lg-3">
+            <div class="card card-custom p-4 border bg-white sticky-top" style="top: 85px; z-index: 10;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-sliders text-primary me-2"></i>Filters</h5>
+                    <a asp-action="Search" class="small text-muted text-decoration-none">Reset</a>
+                </div>
+
+                <form asp-action="Search" method="get">
+                    <!-- Keyword Search -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Keyword</label>
+                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control form-control-sm rounded-3" placeholder="Skill name or topic...">
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Category</label>
+                        <select name="categoryId" class="form-select form-select-sm rounded-3">
+                            <option value="">All Categories</option>
+                            @foreach (var cat in categories)
+                            {
+                                <option value="@cat.Id" selected="@(selectedCat == cat.Id ? "selected" : null)">
+                                    @cat.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Proficiency Level -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Proficiency Level</label>
+                        <select name="level" class="form-select form-select-sm rounded-3">
+                            <option value="">Any Level</option>
+                            @foreach (ProficiencyLevel lvl in Enum.GetValues(typeof(ProficiencyLevel)))
+                            {
+                                <option value="@lvl" selected="@(selectedLevel == lvl ? "selected" : null)">
+                                    @lvl
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Location Filter -->
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted">Location / Timezone</label>
+                        <input type="text" name="location" value="@ViewBag.Location" class="form-control form-control-sm rounded-3" placeholder="City, country or remote">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom btn-sm w-100 py-2">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Column -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <div>
+                    <h3 class="fw-bold mb-0">Search Results</h3>
+                    <small class="text-muted">
+                        @if (Model != null && Model.TotalCount > 0)
+                        {
+                            <span>Found <strong>@Model.TotalCount</strong> skills matching your criteria</span>
+                        }
+                        else
+                        {
+                            <span>Showing all available community skills</span>
+                        }
+                    </small>
+                </div>
+            </div>
+
+            @if (Model == null || !Model.Items.Any())
+            {
+                <!-- Empty State Matching API Expressive Envelope -->
+                <div class="card card-custom p-5 text-center border-0 bg-white">
+                    <div class="rounded-circle bg-light text-muted d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 72px; height: 72px;">
+                        <i class="bi bi-search fs-2"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">No skills or members found</h4>
+                    <p class="text-muted small max-w-md mx-auto mb-4">
+                        We couldn't find any skills matching your current search parameters. Try clearing your filters or searching for broader terms like "Programming", "Spanish", or "Design".
+                    </p>
+                    <div>
+                        <a class="btn btn-outline-primary rounded-pill px-4 btn-sm" asp-action="Search">Clear Filters</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row g-4">
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="col-md-6">
+                            <div class="card card-custom card-hover p-4 h-100 d-flex flex-column bg-white">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 mb-1">
+                                            @item.CategoryName
+                                        </span>
+                                        <h5 class="fw-bold mb-0 mt-1">@item.SkillName</h5>
+                                    </div>
+                                    <span class="badge bg-light text-muted border rounded-pill">
+                                        @item.ProficiencyLevel
+                                    </span>
+                                </div>
+
+                                <p class="small text-muted mb-3 flex-grow-1">
+                                    @(string.IsNullOrEmpty(item.Description) ? "Experienced mentor open to reciprocal skill exchange sessions." : item.Description)
+                                </p>
+
+                                <div class="d-flex justify-content-between align-items-center py-2 border-top border-bottom mb-3 text-muted small">
+                                    <span><i class="bi bi-award text-warning me-1"></i><strong>@item.YearsOfExperience</strong> years experience</span>
+                                    @if (!string.IsNullOrEmpty(item.PortfolioUrl))
+                                    {
+                                        <a href="@item.PortfolioUrl" target="_blank" class="text-primary text-decoration-none small">
+                                            <i class="bi bi-link-45deg"></i> Portfolio
+                                        </a>
+                                    }
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-primary-custom btn-sm flex-grow-1" asp-controller="SwapRequests" asp-action="Create" asp-route-wantedSkillId="@item.SkillId">
+                                        <i class="bi bi-arrow-repeat me-1"></i> Request Swap
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.TotalPages > 1)
+                {
+                    <div class="d-flex justify-content-center mt-5">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-sm gap-1">
+                                <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                                    <a class="page-link rounded-3" asp-action="Search" 
+                                       asp-route-keyword="@ViewBag.Keyword"
+                                       asp-route-categoryId="@selectedCat"
+                                       asp-route-level="@selectedLevel"
+                                       asp-route-location="@ViewBag.Location"
+                                       asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+                                </li>
+                                @for (int p = 1; p <= Model.TotalPages; p++)
+                                {
+                                    <li class="page-item @(p == Model.PageNumber ? "active" : "")">
+                                        <a class="page-link rounded-3" asp-action="Search"
+                                           asp-route-keyword="@ViewBag.Keyword"
+                                           asp-route-categoryId="@selectedCat"
+                                           asp-route-level="@selectedLevel"
+                                           asp-route-location="@ViewBag.Location"
+                                           asp-route-pageNumber="@p">@p</a>
+                                    </li>
+                                }
+                                <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                                    <a class="page-link rounded-3" asp-action="Search"
+                                       asp-route-keyword="@ViewBag.Keyword"
+                                       asp-route-categoryId="@selectedCat"
+                                       asp-route-level="@selectedLevel"
+                                       asp-route-location="@ViewBag.Location"
+                                       asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

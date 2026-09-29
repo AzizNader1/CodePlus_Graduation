@@ -1,0 +1,274 @@
+@model SkillSwap.Application.DTOs.HomeFeedDTO
+@{
+    ViewData["Title"] = "Learn by Sharing - Peer-to-Peer Skill Exchange";
+}
+
+<!-- Hero Section -->
+<section class="hero-gradient position-relative overflow-hidden">
+    <div class="container-xl">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white border shadow-sm mb-4">
+                    <span class="badge bg-primary rounded-pill">New</span>
+                    <span class="small fw-semibold text-muted">100% Reciprocal Skill Synergy Matching</span>
+                    <i class="bi bi-chevron-right small text-muted"></i>
+                </div>
+                <h1 class="hero-title mb-4">
+                    Exchange Skills.<br />
+                    <span class="highlight">Learn Without Limits.</span>
+                </h1>
+                <p class="lead text-muted mb-5 pe-lg-5">
+                    Connect with software engineers, designers, polyglots, and artists worldwide. Teach what you love, learn what you need — entirely peer-to-peer.
+                </p>
+
+                <!-- Search Bar matching Figma -->
+                <form class="card p-2 rounded-4 shadow-sm border mb-4 bg-white" asp-controller="Discover" asp-action="Search" method="get">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-0 text-muted ps-3"><i class="bi bi-search"></i></span>
+                                <input type="text" name="keyword" class="form-control border-0 shadow-none ps-1" placeholder="What do you want to learn? (e.g. C#, Spanish, UI/UX)">
+                            </div>
+                        </div>
+                        <div class="col-md-4 border-start border-md-start">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-0 text-muted ps-3"><i class="bi bi-grid"></i></span>
+                                <select name="categoryId" class="form-select border-0 shadow-none ps-1 text-muted">
+                                    <option value="">All Categories</option>
+                                    @if (Model.FeaturedCategories != null)
+                                    {
+                                        foreach (var cat in Model.FeaturedCategories)
+                                        {
+                                            <option value="@cat.Id">@cat.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary-custom w-100 py-2">Find Swappers</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Hero Trust Badges -->
+                <div class="d-flex flex-wrap gap-4 text-muted small pt-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                        <span>Zero currency required</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-camera-video-fill text-primary fs-5"></i>
+                        <span>Integrated WebRTC video</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-check text-warning fs-5"></i>
+                        <span>Verified peer reviews</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Graphic / Interactive Card Preview -->
+            <div class="col-lg-5">
+                <div class="position-relative">
+                    <div class="card card-custom p-4 shadow-lg border-0 bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
+                                <i class="bi bi-lightning-charge-fill me-1"></i> Perfect Match (100%)
+                            </span>
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i> Active Now</small>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Mentor" class="avatar-lg shadow-sm" style="width:72px; height:72px;">
+                            <div>
+                                <h5 class="fw-bold mb-1">Alice Johnson</h5>
+                                <p class="text-muted small mb-1">Full-Stack .NET & Cloud Architect</p>
+                                <div class="d-flex align-items-center gap-1 star-rating small">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span class="fw-bold text-dark">5.0</span>
+                                    <span class="text-muted">(18 completed swaps)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-light rounded-3 mb-3 border">
+                            <div class="small fw-bold text-uppercase text-muted mb-2" style="font-size:0.75rem;">Skills Exchange Proposal</div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Teaches C# & .NET</span>
+                                </div>
+                                <i class="bi bi-arrow-left-right text-muted fs-5"></i>
+                                <div>
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill">Learns Spanish</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-primary-custom flex-grow-1" asp-controller="Discover" asp-action="Matches">Explore Matches</a>
+                            <a class="btn btn-secondary-custom" asp-controller="Discover" asp-action="Index"><i class="bi bi-eye"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-white border-bottom">
+    <div class="container-xl py-4">
+        <div class="text-center max-w-xl mx-auto mb-5">
+            <span class="text-primary fw-bold text-uppercase small letter-spacing-1">Simple 3-Step Journey</span>
+            <h2 class="fw-bold display-6 mt-1">How SkillSwap Works</h2>
+            <p class="text-muted">A collaborative learning model built on reciprocity and direct engagement.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border text-center">
+                    <div class="rounded-circle bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 64px; height: 64px;">
+                        <i class="bi bi-person-badge fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">1. List Your Skills</h5>
+                    <p class="text-muted small mb-0">Create your profile with what you're qualified to teach and the specific abilities you're seeking to master.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border text-center">
+                    <div class="rounded-circle bg-success-subtle text-success d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 64px; height: 64px;">
+                        <i class="bi bi-arrows-angle-contract fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">2. Match & Negotiate</h5>
+                    <p class="text-muted small mb-0">Our reciprocal synergy engine suggests ideal learning partners. Send proposals, counter-offer durations, and agree on times.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border text-center">
+                    <div class="rounded-circle bg-warning-subtle text-warning d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 64px; height: 64px;">
+                        <i class="bi bi-camera-video fs-3"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">3. Video Call & Learn</h5>
+                    <p class="text-muted small mb-0">Meet inside our interactive WebRTC video classroom. Confirm session completion and build your peer reputation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="py-5 bg-light">
+    <div class="container-xl py-4">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <span class="text-primary fw-bold text-uppercase small">Knowledge Catalog</span>
+                <h2 class="fw-bold mb-0">Browse by Category</h2>
+            </div>
+            <a class="btn btn-outline-primary btn-sm rounded-pill fw-semibold px-3" asp-controller="Discover" asp-action="Index">View All</a>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.FeaturedCategories != null && Model.FeaturedCategories.Any())
+            {
+                foreach (var category in Model.FeaturedCategories)
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <a class="card card-custom card-hover p-4 text-decoration-none text-dark h-100" asp-controller="Discover" asp-action="Search" asp-route-categoryId="@category.Id">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="brand-badge" style="width:48px; height:48px; border-radius:12px; font-size:1.4rem;">
+                                    <i class="bi bi-code-slash"></i>
+                                </div>
+                                <span class="badge bg-light text-muted border rounded-pill px-2 py-1">@category.SkillsCount skills</span>
+                            </div>
+                            <h5 class="fw-bold mb-1">@category.Name</h5>
+                            <p class="text-muted small mb-0 line-clamp-2">@category.Description</p>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Top Rated Swappers & Mentors -->
+<section class="py-5 bg-white">
+    <div class="container-xl py-4">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <span class="text-primary fw-bold text-uppercase small">Community Spotlights</span>
+                <h2 class="fw-bold mb-0">Top Rated Swappers</h2>
+            </div>
+            <a class="btn btn-outline-primary btn-sm rounded-pill fw-semibold px-3" asp-controller="Discover" asp-action="Index">Meet More</a>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.TopRatedSwappers != null && Model.TopRatedSwappers.Any())
+            {
+                foreach (var swapper in Model.TopRatedSwappers.Take(4))
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card card-custom card-hover h-100 p-4 d-flex flex-column">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                @if (!string.IsNullOrEmpty(swapper.AvatarUrl))
+                                {
+                                    <img src="http://localhost:5200@(swapper.AvatarUrl)" alt="@swapper.FullName" class="avatar-circle" style="width:52px; height:52px;" onerror="this.src='/images/default-avatar.png';">
+                                }
+                                else
+                                {
+                                    var initial = !string.IsNullOrEmpty(swapper.FullName) ? swapper.FullName[0].ToString().ToUpper() : "U";
+                                    <div class="avatar-placeholder" style="width:52px; height:52px; font-size:1.2rem;">@initial</div>
+                                }
+                                <div>
+                                    <h6 class="fw-bold mb-0">@swapper.FullName</h6>
+                                    <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>@(string.IsNullOrEmpty(swapper.Location) ? "Worldwide" : swapper.Location)</small>
+                                </div>
+                            </div>
+
+                            <p class="small text-muted mb-3 flex-grow-1">@(string.IsNullOrEmpty(swapper.Bio) ? "Passionate community member open to reciprocal skill swaps." : swapper.Bio)</p>
+
+                            <div class="d-flex justify-content-between align-items-center py-2 border-top border-bottom mb-3 text-muted small">
+                                <div>
+                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                    <span class="fw-bold text-dark">@(swapper.AverageRating > 0 ? swapper.AverageRating.ToString("F1") : "5.0")</span>
+                                    <span>(@swapper.TotalReviewsCount reviews)</span>
+                                </div>
+                                <span class="fw-semibold text-primary">@swapper.TotalSwapsCompleted swaps</span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-primary-custom btn-sm flex-grow-1" asp-controller="Profile" asp-action="User" asp-route-userId="@swapper.Id">
+                                    View Profile
+                                </a>
+                                <a class="btn btn-secondary-custom btn-sm" asp-controller="SwapRequests" asp-action="Create" asp-route-recipientId="@swapper.Id" title="Request Swap">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-5 bg-canvas">
+    <div class="container-xl py-4">
+        <div class="card p-5 rounded-5 border-0 shadow-lg text-white" style="background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <h2 class="display-6 fw-bold mb-3">Ready to expand your skillset?</h2>
+                    <p class="lead mb-0 text-white-50">Join our growing network of mentors, professionals, and lifelong learners today. No fees, no subscriptions required to start exchanging.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="btn btn-light btn-lg rounded-pill px-4 fw-bold text-primary shadow" asp-controller="Auth" asp-action="Register">
+                        Create Free Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

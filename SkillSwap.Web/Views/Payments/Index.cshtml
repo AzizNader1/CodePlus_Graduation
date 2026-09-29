@@ -1,0 +1,118 @@
+@model List<SkillSwap.Application.DTOs.PaymentTransactionDTO>
+@{
+    ViewData["Title"] = "Wallet & Payments";
+}
+
+<div class="container-xl py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h3 class="fw-bold mb-1">Wallet & Payments</h3>
+            <p class="text-muted small mb-0">Manage account deposits, view transaction records, and upgrade to Pro.</p>
+        </div>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card card-custom p-4 bg-white border h-100">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="text-muted small fw-bold text-uppercase">Account Balance</span>
+                        <h2 class="display-6 fw-bold mb-0 text-primary">$0.00 <span class="fs-6 text-muted fw-normal">USD</span></h2>
+                    </div>
+                    <div class="brand-badge bg-primary text-white" style="width:48px; height:48px; font-size:1.3rem;">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                </div>
+                <p class="small text-muted mb-4">Add funds to purchase subscription perks, verified profile badges, or platform tokens.</p>
+
+                <!-- Deposit Form -->
+                <form asp-action="CreateDeposit" method="post">
+                    <label class="form-label small fw-bold text-muted">Deposit Amount (USD)</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-light border-end-0 text-muted">$</span>
+                        <input type="number" id="depositAmount" name="amount" class="form-control bg-light border-start-0 py-2 fw-bold" value="25.00" min="5" step="5" required />
+                        <button type="submit" class="btn btn-primary-custom px-4">Add Funds via Stripe</button>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-light btn-sm rounded-pill border px-3" onclick="document.getElementById('depositAmount').value='10.00'">+$10</button>
+                        <button type="button" class="btn btn-light btn-sm rounded-pill border px-3" onclick="document.getElementById('depositAmount').value='25.00'">+$25</button>
+                        <button type="button" class="btn btn-light btn-sm rounded-pill border px-3" onclick="document.getElementById('depositAmount').value='50.00'">+$50</button>
+                        <button type="button" class="btn btn-light btn-sm rounded-pill border px-3" onclick="document.getElementById('depositAmount').value='100.00'">+$100</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card card-custom p-4 text-white border-0 h-100 shadow" style="background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <span class="badge bg-warning text-dark rounded-pill px-3 py-1 mb-2 fw-bold">PRO MEMBERSHIP</span>
+                        <h3 class="fw-bold mb-0">SkillSwap Pro Plan</h3>
+                    </div>
+                    <div class="fs-1 text-warning"><i class="bi bi-patch-check-fill"></i></div>
+                </div>
+
+                <p class="small text-white-50 mb-3">Unlock unlimited simultaneous swaps, priority search placement, and verified pro instructor status.</p>
+
+                <ul class="list-unstyled small mb-4 d-flex flex-column gap-2">
+                    <li><i class="bi bi-check-circle-fill text-warning me-2"></i>Unlimited concurrent swap proposals</li>
+                    <li><i class="bi bi-check-circle-fill text-warning me-2"></i>Top ranking in reciprocal match feed</li>
+                    <li><i class="bi bi-check-circle-fill text-warning me-2"></i>Verified Mentor badge on your profile</li>
+                </ul>
+
+                <form asp-action="CreateSubscription" method="post" class="mt-auto">
+                    <input type="hidden" name="planType" value="ProMonthly" />
+                    <button type="submit" class="btn btn-warning text-dark w-100 py-2 fw-bold rounded-pill shadow-sm">
+                        Upgrade to Pro ($19.99 / month)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction History Table -->
+    <div class="card card-custom p-4 bg-white border">
+        <h5 class="fw-bold mb-3"><i class="bi bi-clock-history text-primary me-2"></i>Transaction Ledger</h5>
+        
+        @if (!Model.Any())
+        {
+            <div class="p-4 text-center bg-light rounded-4">
+                <p class="text-muted small mb-0">@(ViewBag.Message ?? "No payment transactions found in your account history.")</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light small text-muted text-uppercase">
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        @foreach (var tx in Model)
+                        {
+                            <tr>
+                                <td><code class="text-dark">@tx.Id.ToString().Substring(0, 8)...</code></td>
+                                <td class="text-muted">@tx.CreatedAt.ToString("MMM dd, yyyy - hh:mm tt")</td>
+                                <td>@tx.Description</td>
+                                <td class="fw-bold text-success">+@tx.Amount.ToString("C")</td>
+                                <td>
+                                    <span class="badge @(tx.Status == PaymentStatus.Succeeded ? "bg-success-subtle text-success" : "bg-warning-subtle text-warning") rounded-pill px-2 py-1">
+                                        @tx.Status
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

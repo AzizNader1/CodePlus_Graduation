@@ -1,0 +1,109 @@
+@model List<SkillSwap.Application.DTOs.SwapMatchDTO>
+@{
+    ViewData["Title"] = "Your Recommended Reciprocal Matches";
+}
+
+<div class="bg-white border-bottom py-4">
+    <div class="container-xl">
+        <div class="d-flex align-items-center gap-3">
+            <div class="brand-badge bg-warning text-dark" style="width:48px; height:48px; border-radius:12px; font-size:1.3rem;">
+                <i class="bi bi-stars"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold mb-0">Recommended Skill Matches</h3>
+                <p class="text-muted small mb-0">Members with bidirectional skill synergy: they want what you teach, and teach what you want.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-xl py-5">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card card-custom p-5 text-center border-0 bg-white max-w-lg mx-auto">
+            <div class="rounded-circle bg-light text-muted d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 72px; height: 72px;">
+                <i class="bi bi-arrow-repeat fs-2"></i>
+            </div>
+            <h4 class="fw-bold mb-2">No reciprocal matches found yet</h4>
+            <p class="text-muted small mb-4">
+                @(ViewBag.Message ?? "Add more skills you offer and skills you want to learn to your profile so our algorithm can pair you with complimentary partners.")
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <a class="btn btn-primary-custom btn-sm px-4" asp-controller="Profile" asp-action="Edit">
+                    Update My Skills
+                </a>
+                <a class="btn btn-outline-secondary btn-sm px-4" asp-action="Index">
+                    Explore Catalog
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var match in Model)
+            {
+                var partner = match.PartnerUser;
+                <div class="col-lg-6">
+                    <div class="card card-custom card-hover p-4 border bg-white h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
+                                <i class="bi bi-lightning-charge-fill me-1"></i> @match.MatchCompatibilityScore% Mutual Match
+                            </span>
+                            <small class="text-muted"><i class="bi bi-star-fill text-warning me-1"></i>@(partner.AverageRating > 0 ? partner.AverageRating.ToString("F1") : "5.0") rating</small>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            @if (!string.IsNullOrEmpty(partner.AvatarUrl))
+                            {
+                                <img src="http://localhost:5200@(partner.AvatarUrl)" alt="@partner.FullName" class="avatar-circle" style="width:60px; height:60px;" onerror="this.src='/images/default-avatar.png';">
+                            }
+                            else
+                            {
+                                var initial = !string.IsNullOrEmpty(partner.FullName) ? partner.FullName[0].ToString().ToUpper() : "U";
+                                <div class="avatar-placeholder" style="width:60px; height:60px; font-size:1.3rem;">@initial</div>
+                            }
+                            <div>
+                                <h5 class="fw-bold mb-0">@partner.FullName</h5>
+                                <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>@(string.IsNullOrEmpty(partner.Location) ? "Worldwide" : partner.Location)</small>
+                            </div>
+                        </div>
+
+                        <p class="small text-muted mb-4 flex-grow-1">@(string.IsNullOrEmpty(partner.Bio) ? "Ready for a reciprocal skill exchange." : partner.Bio)</p>
+
+                        <!-- Reciprocal Exchange Box -->
+                        <div class="p-3 bg-light rounded-4 mb-4 border">
+                            <div class="row g-2 align-items-center text-center">
+                                <div class="col-5">
+                                    <small class="text-muted fw-bold d-block mb-1" style="font-size:0.75rem;">THEY TEACH YOU</small>
+                                    <span class="badge bg-primary text-white rounded-pill px-3 py-1 text-truncate d-inline-block mw-100">
+                                        @match.TheyTeachSkill
+                                    </span>
+                                </div>
+                                <div class="col-2">
+                                    <i class="bi bi-arrow-left-right text-primary fs-4"></i>
+                                </div>
+                                <div class="col-5">
+                                    <small class="text-muted fw-bold d-block mb-1" style="font-size:0.75rem;">YOU TEACH THEM</small>
+                                    <span class="badge bg-secondary text-white rounded-pill px-3 py-1 text-truncate d-inline-block mw-100">
+                                        @match.YouTeachSkill
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-primary-custom flex-grow-1" asp-controller="SwapRequests" asp-action="Create" 
+                               asp-route-recipientId="@partner.Id">
+                                <i class="bi bi-arrow-repeat me-1"></i> Propose Swap
+                            </a>
+                            <a class="btn btn-secondary-custom" asp-controller="Profile" asp-action="User" asp-route-userId="@partner.Id">
+                                View Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

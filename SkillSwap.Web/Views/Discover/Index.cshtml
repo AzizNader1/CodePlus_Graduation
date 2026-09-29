@@ -1,0 +1,168 @@
+@model SkillSwap.Application.DTOs.HomeFeedDTO
+@{
+    ViewData["Title"] = "Explore Skills & Members";
+    var categories = ViewBag.Categories as List<CategoryDTO> ?? new List<CategoryDTO>();
+}
+
+<div class="bg-white border-bottom py-4">
+    <div class="container-xl">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-1">Explore Community Skills</h2>
+                <p class="text-muted small mb-0">Browse through hundreds of offered abilities or find your next exchange partner.</p>
+            </div>
+            <div class="col-lg-6">
+                <form asp-action="Search" method="get" class="d-flex gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="keyword" class="form-control bg-light border-0 shadow-none" placeholder="Search by skill name, programming language, topic...">
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom text-nowrap">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories horizontal pills -->
+        <div class="d-flex flex-wrap gap-2 mt-4 pt-2 border-top">
+            <a class="btn btn-primary-custom btn-sm rounded-pill" asp-action="Search">All Skills</a>
+            @foreach (var cat in categories)
+            {
+                <a class="btn btn-light btn-sm rounded-pill border text-muted px-3" asp-action="Search" asp-route-categoryId="@cat.Id">
+                    @cat.Name (@cat.SkillsCount)
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container-xl py-5">
+    <!-- Reciprocal Match Promotion Card -->
+    <div class="card p-4 rounded-4 border-0 shadow-sm mb-5 text-white" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="brand-badge bg-white text-primary" style="width:54px; height:54px; font-size:1.5rem;">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-1">Looking for 100% Reciprocal Synergy?</h4>
+                    <p class="mb-0 text-white-50 small">Our algorithm automatically pairs you with members who teach what you want, and want what you teach.</p>
+                </div>
+            </div>
+            <a class="btn btn-light rounded-pill px-4 fw-bold text-primary shadow-sm text-nowrap" asp-action="Matches">
+                View My Matches
+            </a>
+        </div>
+    </div>
+
+    <!-- Trending Skills Section -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0"><i class="bi bi-graph-up-arrow text-primary me-2"></i>Trending Skills</h4>
+            <a class="btn btn-link text-primary p-0 text-decoration-none small fw-bold" asp-action="Search">Browse All &rarr;</a>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.TrendingSkills != null && Model.TrendingSkills.Any())
+            {
+                foreach (var skill in Model.TrendingSkills)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card card-custom card-hover p-4 h-100 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1">
+                                    @skill.CategoryName
+                                </span>
+                                <span class="badge bg-light text-muted border rounded-pill">
+                                    @skill.ProficiencyLevel
+                                </span>
+                            </div>
+                            <h5 class="fw-bold mb-2">@skill.SkillName</h5>
+                            <p class="text-muted small mb-3 flex-grow-1">@(string.IsNullOrEmpty(skill.Description) ? "Comprehensive 1-on-1 coaching and exchange." : skill.Description)</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                <small class="text-muted"><i class="bi bi-award me-1 text-warning"></i>@skill.YearsOfExperience yrs exp</small>
+                                <a class="btn btn-outline-primary btn-sm rounded-pill fw-semibold" asp-action="Search" asp-route-keyword="@skill.SkillName">
+                                    Find Instructors
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Active Swappers Grid -->
+    <div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0"><i class="bi bi-people text-primary me-2"></i>Featured Community Mentors</h4>
+            <a class="btn btn-link text-primary p-0 text-decoration-none small fw-bold" asp-action="Search">See All Members &rarr;</a>
+        </div>
+
+        <div class="row g-4">
+            @if (Model.TopRatedSwappers != null && Model.TopRatedSwappers.Any())
+            {
+                foreach (var swapper in Model.TopRatedSwappers)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card card-custom card-hover p-4 h-100 d-flex flex-column">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                @if (!string.IsNullOrEmpty(swapper.AvatarUrl))
+                                {
+                                    <img src="http://localhost:5200@(swapper.AvatarUrl)" alt="@swapper.FullName" class="avatar-circle" style="width:56px; height:56px;" onerror="this.src='/images/default-avatar.png';">
+                                }
+                                else
+                                {
+                                    var initial = !string.IsNullOrEmpty(swapper.FullName) ? swapper.FullName[0].ToString().ToUpper() : "U";
+                                    <div class="avatar-placeholder" style="width:56px; height:56px; font-size:1.25rem;">@initial</div>
+                                }
+                                <div>
+                                    <h6 class="fw-bold mb-0">@swapper.FullName</h6>
+                                    <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>@(string.IsNullOrEmpty(swapper.Location) ? "Worldwide" : swapper.Location)</small>
+                                </div>
+                            </div>
+
+                            <p class="small text-muted mb-3 flex-grow-1">@(string.IsNullOrEmpty(swapper.Bio) ? "Available for reciprocal peer learning." : swapper.Bio)</p>
+
+                            <!-- Skills offered chips -->
+                            <div class="mb-3">
+                                <small class="text-muted fw-bold d-block mb-1" style="font-size:0.75rem;">TEACHES:</small>
+                                <div class="d-flex flex-wrap gap-1">
+                                    @if (swapper.SkillsOffered != null && swapper.SkillsOffered.Any())
+                                    {
+                                        foreach (var skill in swapper.SkillsOffered.Take(3))
+                                        {
+                                            <span class="skill-tag">@skill.SkillName</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">No public skills listed</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center py-2 border-top border-bottom mb-3 text-muted small">
+                                <div>
+                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                    <span class="fw-bold text-dark">@(swapper.AverageRating > 0 ? swapper.AverageRating.ToString("F1") : "5.0")</span>
+                                    <span>(@swapper.TotalReviewsCount reviews)</span>
+                                </div>
+                                <span class="fw-semibold text-primary">@swapper.TotalSwapsCompleted swaps</span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-primary-custom btn-sm flex-grow-1" asp-controller="Profile" asp-action="User" asp-route-userId="@swapper.Id">
+                                    View Profile
+                                </a>
+                                <a class="btn btn-secondary-custom btn-sm" asp-controller="SwapRequests" asp-action="Create" asp-route-recipientId="@swapper.Id" title="Request Swap">
+                                    <i class="bi bi-arrow-repeat"></i> Propose
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

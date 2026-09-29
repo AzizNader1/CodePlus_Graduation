@@ -1,0 +1,150 @@
+@model SkillSwap.Application.DTOs.PublicUserProfileDTO
+@{
+    ViewData["Title"] = Model.FullName + " - Public Profile";
+}
+
+<div class="container-xl py-5">
+    <div class="card card-custom p-4 p-md-5 mb-5 border-0 shadow-sm bg-white">
+        <div class="row align-items-center g-4">
+            <div class="col-md-auto text-center">
+                @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+                {
+                    <img src="http://localhost:5200@(Model.AvatarUrl)" alt="@Model.FullName" class="avatar-lg" style="width:110px; height:110px;" onerror="this.src='/images/default-avatar.png';">
+                }
+                else
+                {
+                    var initial = !string.IsNullOrEmpty(Model.FullName) ? Model.FullName[0].ToString().ToUpper() : "U";
+                    <div class="avatar-placeholder" style="width:110px; height:110px; font-size:2.5rem;">@initial</div>
+                }
+            </div>
+
+            <div class="col-md">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+                    <div>
+                        <h2 class="fw-bold mb-1">@Model.FullName</h2>
+                        <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
+                            <span><i class="bi bi-geo-alt me-1"></i>@(string.IsNullOrEmpty(Model.Location) ? "Location not specified" : Model.Location)</span>
+                            <span><i class="bi bi-arrow-repeat me-1"></i>@Model.TotalSwapsCompleted swaps completed</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-primary-custom" asp-controller="SwapRequests" asp-action="Create" asp-route-recipientId="@Model.Id">
+                            <i class="bi bi-arrow-repeat me-1"></i> Propose Skill Swap
+                        </a>
+                    </div>
+                </div>
+
+                <p class="text-muted mt-3 mb-3">
+                    @(string.IsNullOrEmpty(Model.Bio) ? "This member hasn't added a biography yet." : Model.Bio)
+                </p>
+
+                <div class="d-flex flex-wrap gap-4 pt-3 border-top text-muted small">
+                    <div>
+                        <i class="bi bi-star-fill text-warning me-1"></i>
+                        <strong class="text-dark fs-6">@(Model.AverageRating > 0 ? Model.AverageRating.ToString("F1") : "5.0")</strong>
+                        <span>Average Rating</span>
+                    </div>
+                    <div>
+                        <i class="bi bi-arrow-left-right text-primary me-1"></i>
+                        <strong class="text-dark fs-6">@Model.TotalSwapsCompleted</strong>
+                        <span>Swaps Completed</span>
+                    </div>
+                    <div>
+                        <i class="bi bi-chat-heart text-danger me-1"></i>
+                        <strong class="text-dark fs-6">@Model.TotalReviewsCount</strong>
+                        <span>Reviews Received</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Details -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card card-custom p-4 bg-white border h-100">
+                <h5 class="fw-bold mb-3"><i class="bi bi-mortarboard text-primary me-2"></i>Skills Offered</h5>
+                @if (Model.SkillsOffered == null || !Model.SkillsOffered.Any())
+                {
+                    <p class="text-muted small">No public skills listed.</p>
+                }
+                else
+                {
+                    <div class="d-flex flex-column gap-3">
+                        @foreach (var s in Model.SkillsOffered)
+                        {
+                            <div class="p-3 bg-light rounded-4 border">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="fw-bold mb-0">@s.SkillName</h6>
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">@s.ProficiencyLevel</span>
+                                </div>
+                                <small class="text-muted d-block"><i class="bi bi-award me-1"></i>@s.YearsOfExperience years experience</small>
+                                @if (!string.IsNullOrEmpty(s.Description))
+                                {
+                                    <p class="small text-muted mb-0 mt-1">@s.Description</p>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card card-custom p-4 bg-white border h-100">
+                <h5 class="fw-bold mb-3"><i class="bi bi-compass text-secondary me-2"></i>Skills Desired</h5>
+                @if (Model.SkillsWanted == null || !Model.SkillsWanted.Any())
+                {
+                    <p class="text-muted small">No learning goals specified.</p>
+                }
+                else
+                {
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var w in Model.SkillsWanted)
+                        {
+                            <span class="skill-tag skill-tag-wanted fs-6 py-2 px-3">
+                                <i class="bi bi-bookmark-star me-1"></i>@w.SkillName
+                            </span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Reviews Received -->
+    <div class="card card-custom p-4 bg-white border">
+        <h5 class="fw-bold mb-4"><i class="bi bi-chat-quote text-warning me-2"></i>Community Reviews & Feedback</h5>
+        @if (Model.RecentReviews == null || !Model.RecentReviews.Any())
+        {
+            <div class="p-4 text-center bg-light rounded-4">
+                <p class="text-muted small mb-0">No reviews received yet for this user.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row g-3">
+                @foreach (var r in Model.RecentReviews)
+                {
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-4 border">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <strong class="small">@r.ReviewerName</strong>
+                                </div>
+                                <div class="star-rating small">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="bi @(i <= r.OverallRating ? "bi-star-fill text-warning" : "bi-star text-muted")"></i>
+                                    }
+                                </div>
+                            </div>
+                            <p class="small text-muted mb-1">"@r.Comment"</p>
+                            <small class="text-muted" style="font-size:0.75rem;">@r.CreatedAt.ToString("MMM dd, yyyy")</small>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

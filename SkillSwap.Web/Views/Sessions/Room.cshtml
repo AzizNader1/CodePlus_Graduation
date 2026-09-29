@@ -1,0 +1,207 @@
+@model SkillSwap.Application.DTOs.SwapSessionDTO
+@{
+    ViewData["Title"] = "Live Video Session - " + Model.Id;
+    var joinInfo = ViewBag.JoinInfo as JoinSessionCallResponseDTO;
+}
+
+<div class="bg-dark text-white py-3 border-bottom border-secondary">
+    <div class="container-xl d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-danger rounded-pill px-3 py-1 d-flex align-items-center gap-1">
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                LIVE CALL
+            </span>
+            <div>
+                <strong class="d-block">Skill Exchange Session</strong>
+                <small class="text-white-50">Host: @Model.HostName &bull; Participant: @Model.ParticipantName</small>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2 bg-black bg-opacity-50 px-3 py-1 rounded-pill small">
+                <i class="bi bi-stopwatch text-warning"></i>
+                <span id="callDurationTimer" class="fw-mono">00:00:00</span>
+            </div>
+            <a class="btn btn-outline-light btn-sm rounded-pill" asp-action="Index">
+                &larr; Exit to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container-xl py-4">
+    <div class="row g-4">
+        <!-- Main Video Area -->
+        <div class="col-lg-8">
+            <div class="video-grid mb-3">
+                <!-- Remote Peer Video Container -->
+                <div class="video-container" id="remoteVideoContainer">
+                    <video id="remoteVideo" class="video-element" autoplay playsinline></video>
+                    <div id="remotePlaceholder" class="text-center p-4">
+                        <div class="avatar-lg bg-secondary text-white mx-auto mb-3 d-flex align-items-center justify-content-center fs-1">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <h5 class="text-white fw-bold mb-1">Waiting for partner to connect...</h5>
+                        <p class="text-white-50 small mb-0">Share meeting link or wait for peer to join the room</p>
+                    </div>
+                    <div class="video-badge">
+                        <i class="bi bi-person-fill me-1"></i> Partner Stream
+                    </div>
+                </div>
+
+                <!-- Local Video Container -->
+                <div class="video-container" id="localVideoContainer">
+                    <video id="localVideo" class="video-element" autoplay playsinline muted></video>
+                    <div class="video-badge bg-primary">
+                        <i class="bi bi-camera-video-fill me-1"></i> You (Local Stream)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call Toolbar matching Figma -->
+            <div class="text-center mb-4">
+                <div class="call-toolbar">
+                    <button type="button" class="tool-btn" id="btnToggleMic" onclick="toggleMic()" title="Mute / Unmute Mic">
+                        <i class="bi bi-mic-fill" id="micIcon"></i>
+                    </button>
+                    <button type="button" class="tool-btn" id="btnToggleVideo" onclick="toggleCamera()" title="Enable / Disable Camera">
+                        <i class="bi bi-camera-video-fill" id="cameraIcon"></i>
+                    </button>
+                    <button type="button" class="tool-btn" id="btnScreenShare" onclick="toggleScreenShare()" title="Share Screen">
+                        <i class="bi bi-display"></i>
+                    </button>
+                    <form asp-action="Complete" method="post" class="d-inline">
+                        <input type="hidden" name="sessionId" value="@Model.Id" />
+                        <button type="submit" class="tool-btn" style="background:#10b981;" title="Mark Session Finished">
+                            <i class="bi bi-check2"></i>
+                        </button>
+                    </form>
+                    <a class="tool-btn btn-danger" asp-action="Index" title="Leave Session">
+                        <i class="bi bi-telephone-x-fill"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- In-Call Side Panel: Telemetry & Notes -->
+        <div class="col-lg-4">
+            <div class="card card-custom p-4 bg-white border h-100 d-flex flex-column">
+                <h5 class="fw-bold mb-3"><i class="bi bi-broadcast text-primary me-2"></i>Call Telemetry & Status</h5>
+
+                <div class="p-3 bg-light rounded-4 border mb-3 small">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Room Token:</span>
+                        <code class="text-primary text-truncate" style="max-width: 150px;">@(joinInfo?.RoomSecurityToken ?? "ACTIVE_TOKEN")</code>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">STUN ICE Servers:</span>
+                        <span class="badge bg-success-subtle text-success">Google STUN Ready</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Telemetry Heartbeat:</span>
+                        <span id="heartbeatStatus" class="badge bg-primary">Connected (30s)</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted">Meeting Room Link</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" id="meetingLinkInput" class="form-control bg-light rounded-start-3" value="@Model.MeetingLink" readonly>
+                        <button class="btn btn-outline-secondary rounded-end-3" type="button" onclick="copyMeetingLink()">Copy</button>
+                    </div>
+                </div>
+
+                <div class="flex-grow-1 d-flex flex-column">
+                    <label class="form-label small fw-bold text-muted">Session Shared Notes</label>
+                    <textarea class="form-control rounded-3 flex-grow-1 p-3 small mb-3" rows="6" placeholder="Collaborative session notes, code snippets, vocabulary lists, and shared links during the call..."></textarea>
+                </div>
+
+                <div class="pt-3 border-top">
+                    <form asp-action="Complete" method="post">
+                        <input type="hidden" name="sessionId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-semibold">
+                            <i class="bi bi-check-circle-fill me-1"></i> End & Complete Session
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let localStream = null;
+        let isAudioMuted = false;
+        let isVideoOff = false;
+        let secondsElapsed = 0;
+        const sessionId = '@Model.Id';
+
+        // 1. Initialize local camera & mic
+        async function initMedia() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                document.getElementById('localVideo').srcObject = localStream;
+            } catch (err) {
+                console.warn('Webcam/Mic not accessible directly:', err);
+            }
+        }
+
+        // 2. Call Timer
+        setInterval(() => {
+            secondsElapsed++;
+            const hrs = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+            const secs = String(secondsElapsed % 60).padStart(2, '0');
+            document.getElementById('callDurationTimer').innerText = `${hrs}:${mins}:${secs}`;
+        }, 1000);
+
+        // 3. Telemetry Heartbeat (pings API every 30 seconds)
+        setInterval(async () => {
+            try {
+                await fetch(`http://localhost:5200/api/v1/Sessions/Heartbeat/${sessionId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ inCall: true, timestamp: new Date().toISOString() })
+                });
+                document.getElementById('heartbeatStatus').innerText = 'Synced ' + new Date().toLocaleTimeString();
+            } catch (e) {
+                console.log('Heartbeat ping:', e);
+            }
+        }, 30000);
+
+        function toggleMic() {
+            if (localStream) {
+                isAudioMuted = !isAudioMuted;
+                localStream.getAudioTracks().forEach(t => t.enabled = !isAudioMuted);
+                document.getElementById('micIcon').className = isAudioMuted ? 'bi bi-mic-mute-fill text-danger' : 'bi bi-mic-fill';
+            }
+        }
+
+        function toggleCamera() {
+            if (localStream) {
+                isVideoOff = !isVideoOff;
+                localStream.getVideoTracks().forEach(t => t.enabled = !isVideoOff);
+                document.getElementById('cameraIcon').className = isVideoOff ? 'bi bi-camera-video-off-fill text-danger' : 'bi bi-camera-video-fill';
+            }
+        }
+
+        async function toggleScreenShare() {
+            try {
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                document.getElementById('localVideo').srcObject = screenStream;
+            } catch (err) {
+                console.log('Screen share cancelled', err);
+            }
+        }
+
+        function copyMeetingLink() {
+            const input = document.getElementById('meetingLinkInput');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert('Meeting link copied to clipboard!');
+        }
+
+        document.addEventListener('DOMContentLoaded', initMedia);
+    </script>
+}

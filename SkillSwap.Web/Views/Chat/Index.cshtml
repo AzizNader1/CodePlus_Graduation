@@ -1,0 +1,142 @@
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Direct Messaging";
+    var conversations = ViewBag.Conversations as List<ConversationDTO> ?? new List<ConversationDTO>();
+    var activeConvo = ViewBag.ActiveConversation as ConversationDTO;
+    var messages = ViewBag.Messages as IReadOnlyCollection<MessageDTO> ?? new List<MessageDTO>();
+    var currentUserId = Guid.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var uid) ? uid : Guid.Empty;
+}
+
+<div class="container-xl py-4">
+    <div class="card card-custom border bg-white overflow-hidden shadow-sm">
+        <div class="row g-0">
+            <!-- Left Pane: Conversations List -->
+            <div class="col-lg-4 border-end">
+                <div class="p-3 border-bottom bg-light">
+                    <h5 class="fw-bold mb-0">Messages</h5>
+                </div>
+
+                <div class="chat-thread-list p-2">
+                    @if (!conversations.Any())
+                    {
+                        <div class="p-4 text-center text-muted small">
+                            <i class="bi bi-chat-dots fs-2 d-block mb-2 text-muted"></i>
+                            No active conversations yet. Explore swappers to start chatting!
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var c in conversations)
+                        {
+                            var isActive = activeConvo != null && activeConvo.Id == c.Id;
+                            <a class="chat-thread-item d-flex align-items-center gap-3 text-decoration-none text-dark @(isActive ? "active" : "")" 
+                               asp-action="Index" asp-route-conversationId="@c.Id">
+                                @if (!string.IsNullOrEmpty(c.PartnerAvatarUrl))
+                                {
+                                    <img src="http://localhost:5200@(c.PartnerAvatarUrl)" alt="@c.PartnerName" class="avatar-circle" style="width:44px; height:44px;" onerror="this.src='/images/default-avatar.png';">
+                                }
+                                else
+                                {
+                                    var initial = !string.IsNullOrEmpty(c.PartnerName) ? c.PartnerName[0].ToString().ToUpper() : "U";
+                                    <div class="avatar-placeholder" style="width:44px; height:44px;">@initial</div>
+                                }
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="fw-bold mb-0 text-truncate">@c.PartnerName</h6>
+                                        <small class="text-muted" style="font-size:0.7rem;">@c.LastMessageAt.ToString("MMM dd")</small>
+                                    </div>
+                                    <p class="small text-muted mb-0 text-truncate">@(string.IsNullOrEmpty(c.LastMessageContent) ? "Started a conversation" : c.LastMessageContent)</p>
+                                </div>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Right Pane: Active Thread -->
+            <div class="col-lg-8 d-flex flex-column" style="min-height: 600px;">
+                @if (activeConvo == null)
+                {
+                    <div class="p-5 text-center my-auto text-muted">
+                        <i class="bi bi-chat-square-text fs-1 d-block mb-3"></i>
+                        <h5>Select a conversation to start messaging</h5>
+                    </div>
+                }
+                else
+                {
+                    <!-- Chat Header -->
+                    <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            @if (!string.IsNullOrEmpty(activeConvo.PartnerAvatarUrl))
+                            {
+                                <img src="http://localhost:5200@(activeConvo.PartnerAvatarUrl)" alt="@activeConvo.PartnerName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.png';">
+                            }
+                            else
+                            {
+                                var initial = !string.IsNullOrEmpty(activeConvo.PartnerName) ? activeConvo.PartnerName[0].ToString().ToUpper() : "U";
+                                <div class="avatar-placeholder" style="width:40px; height:40px; font-size:0.9rem;">@initial</div>
+                            }
+                            <div>
+                                <h6 class="fw-bold mb-0">@activeConvo.PartnerName</h6>
+                                <small class="text-success"><i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i>Active</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-outline-primary btn-sm rounded-pill" asp-controller="SwapRequests" asp-action="Create" asp-route-recipientId="@activeConvo.PartnerId">
+                                <i class="bi bi-arrow-repeat me-1"></i> Propose Swap
+                            </a>
+                            <a class="btn btn-light btn-sm rounded-pill" asp-controller="Profile" asp-action="User" asp-route-userId="@activeConvo.PartnerId">
+                                Profile
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Message Feed -->
+                    <div class="chat-window flex-grow-1" id="chatFeed">
+                        @if (!messages.Any())
+                        {
+                            <div class="text-center text-muted small my-auto py-5">
+                                Say hello to @activeConvo.PartnerName to break the ice!
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var msg in messages.OrderBy(m => m.SentAt))
+                            {
+                                var isMe = msg.SenderId == currentUserId;
+                                <div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start") mb-3">
+                                    <div class="chat-bubble @(isMe ? "chat-bubble-out" : "chat-bubble-in")">
+                                        @msg.Content
+                                    </div>
+                                    <small class="text-muted px-2" style="font-size:0.7rem;">@msg.SentAt.ToString("hh:mm tt")</small>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <!-- Input Bar -->
+                    <div class="p-3 border-top bg-white">
+                        <form asp-action="Send" method="post" class="d-flex gap-2">
+                            <input type="hidden" name="conversationId" value="@activeConvo.Id" />
+                            <input type="text" name="content" class="form-control rounded-pill px-4" placeholder="Type a message..." required autocomplete="off" />
+                            <button type="submit" class="btn btn-primary-custom rounded-circle p-2 d-flex align-items-center justify-content-center" style="width:44px; height:44px;">
+                                <i class="bi bi-send-fill fs-5"></i>
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto scroll to bottom of chat feed
+        const feed = document.getElementById('chatFeed');
+        if (feed) {
+            feed.scrollTop = feed.scrollHeight;
+        }
+    </script>
+}

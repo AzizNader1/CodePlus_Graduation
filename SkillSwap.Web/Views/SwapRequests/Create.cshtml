@@ -1,0 +1,88 @@
+@model SkillSwap.Application.DTOs.CreateSwapRequest
+@{
+    ViewData["Title"] = "Propose a Skill Swap";
+    var mySkills = ViewBag.MySkills as List<UserSkillDTO> ?? new List<UserSkillDTO>();
+    var masterSkills = ViewBag.MasterSkills as List<SkillDTO> ?? new List<SkillDTO>();
+}
+
+<div class="container-xl py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card card-custom p-4 p-md-5 bg-white border">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <div>
+                        <h3 class="fw-bold mb-1">Propose a Skill Swap</h3>
+                        <p class="text-muted small mb-0">Set up an exchange of expertise with another community swapper.</p>
+                    </div>
+                    <a class="btn btn-secondary-custom btn-sm" asp-action="Index">Cancel</a>
+                </div>
+
+                <form asp-action="Create" method="post">
+                    <!-- Recipient User ID -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Recipient Member ID</label>
+                        <input asp-for="ReceiverId" class="form-control rounded-3" placeholder="Paste Member GUID or use 'Propose Swap' from user card" required />
+                        <span asp-validation-for="ReceiverId" class="text-danger small"></span>
+                        <small class="text-muted d-block mt-1">Tip: Click 'Propose Swap' on any user card or match to auto-populate this.</small>
+                    </div>
+
+                    <!-- Skills Pair -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Skill You Will Teach</label>
+                            <select asp-for="OfferedSkillId" class="form-select rounded-3" required>
+                                <option value="">-- Select from your skills --</option>
+                                @foreach (var s in mySkills)
+                                {
+                                    <option value="@s.SkillId">@s.SkillName (@s.ProficiencyLevel)</option>
+                                }
+                            </select>
+                            <span asp-validation-for="OfferedSkillId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Skill You Want to Learn</label>
+                            <select asp-for="RequestedSkillId" class="form-select rounded-3" required>
+                                <option value="">-- Select from catalog --</option>
+                                @foreach (var s in masterSkills)
+                                {
+                                    <option value="@s.Id">@s.Name (@s.CategoryName)</option>
+                                }
+                            </select>
+                            <span asp-validation-for="RequestedSkillId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Timing -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Proposed Date & Time</label>
+                            <input asp-for="ProposedDate" type="datetime-local" class="form-control rounded-3" required />
+                            <span asp-validation-for="ProposedDate" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Session Duration</label>
+                            <select asp-for="DurationMinutes" class="form-select rounded-3" required>
+                                <option value="30">30 Minutes (Quick Intro / Code Review)</option>
+                                <option value="45">45 Minutes</option>
+                                <option value="60" selected>60 Minutes (Standard 1-on-1)</option>
+                                <option value="90">90 Minutes (Deep Dive Session)</option>
+                            </select>
+                            <span asp-validation-for="DurationMinutes" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted">Proposal Message & Goals (Optional)</label>
+                        <textarea asp-for="Notes" class="form-control rounded-3" rows="3" placeholder="Introduce yourself and outline what specific topics you'd like to cover during the exchange..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2">Send Swap Proposal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
