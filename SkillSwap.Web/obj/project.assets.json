@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net8.0": {
       "FluentValidation/11.11.0": {
@@ -61,6 +61,22 @@
             "related": ".xml"
           }
         }
+      },
+      "Microsoft.AspNetCore.Authentication.Google/8.0.31": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.AspNetCore.Cryptography.Internal/8.0.11": {
         "type": "package",
@@ -427,6 +443,21 @@
         "lib/netstandard2.0/MediatR.Contracts.xml",
         "mediatr.contracts.2.0.1.nupkg.sha512",
         "mediatr.contracts.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.Google/8.0.31": {
+      "sha512": "GTwXLkCCWtct34Q7zrES0XoUwJcLvbFegV7HEJNsjRXTuaC5MbKfGtBvSalDk40FmCaaH2l9ZNP0yx25e4fmpA==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.google/8.0.31",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll",
+        "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.xml",
+        "microsoft.aspnetcore.authentication.google.8.0.31.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.google.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Cryptography.Internal/8.0.11": {
@@ -870,27 +901,28 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Microsoft.AspNetCore.Authentication.Google >= 8.0.31",
       "SkillSwap.Application >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\azizn\\.nuget\\packages\\": {},
+    "C:\\Users\\East-Sound\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj",
+      "projectUniqueName": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.web\\SkillSwap.Web.csproj",
       "projectName": "SkillSwap.Web",
-      "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj",
-      "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\obj\\",
+      "projectPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.web\\SkillSwap.Web.csproj",
+      "packagesPath": "C:\\Users\\East-Sound\\.nuget\\packages\\",
+      "outputPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\azizn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\East-Sound\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -899,16 +931,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
-              "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj"
+            "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
+              "projectPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj"
             }
           }
         }
@@ -923,12 +953,17 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.400"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
-        "framework": "net8.0",
         "targetAlias": "net8.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Authentication.Google": {
+            "target": "Package",
+            "version": "[8.0.31, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -948,7 +983,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

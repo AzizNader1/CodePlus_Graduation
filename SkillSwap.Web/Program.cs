@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using SkillSwap.Web.Services;
+using Microsoft.AspNetCore.Authentication.Google;
+using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Auth/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
         options.SlidingExpiration = true;
+    }).AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    {
+        options.ClientId =
+            builder.Configuration["Authentication:Google:ClientId"]!;
+
+        options.ClientSecret =
+            builder.Configuration["Authentication:Google:ClientSecret"]!;
+
+        options.SaveTokens = true;
     });
+;
 
 // 4. Typed HttpClient for SkillSwap API
 var apiBaseUrl = builder.Configuration["SkillSwapApi:BaseUrl"] ?? "http://localhost:5200/api/v1/";
@@ -51,7 +63,6 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

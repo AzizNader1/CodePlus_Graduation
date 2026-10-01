@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj": {}
+    "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
+    "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
+        "projectUniqueName": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
         "projectName": "SkillSwap.Application",
-        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
-        "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\obj\\",
+        "projectPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
+        "packagesPath": "C:\\Users\\East-Sound\\.nuget\\packages\\",
+        "outputPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\azizn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\East-Sound\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,16 +26,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
-            "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
-                "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj"
+              "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
+                "projectPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj"
               }
             }
           }
@@ -50,11 +48,10 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.400"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
           "dependencies": {
             "FluentValidation.DependencyInjectionExtensions": {
@@ -86,24 +83,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
+    "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
+        "projectUniqueName": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
         "projectName": "SkillSwap.Domain",
-        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
-        "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\obj\\",
+        "projectPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
+        "packagesPath": "C:\\Users\\East-Sound\\.nuget\\packages\\",
+        "outputPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\azizn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\East-Sound\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -112,12 +109,10 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
-            "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {}
           }
@@ -132,11 +127,10 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.400"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.Extensions.Identity.Stores": {
@@ -160,24 +154,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj": {
+    "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj",
+        "projectUniqueName": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj",
         "projectName": "SkillSwap.Web",
-        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj",
-        "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\obj\\",
+        "projectPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Web\\SkillSwap.Web.csproj",
+        "packagesPath": "C:\\Users\\East-Sound\\.nuget\\packages\\",
+        "outputPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\azizn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\East-Sound\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -186,16 +180,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
-            "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
-                "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj"
+              "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
+                "projectPath": "E:\\Learning Stuff\\.net\\.net projects\\CodePlusGradProjectNewVesrion\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj"
               }
             }
           }
@@ -210,12 +202,17 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.400"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.Google": {
+              "target": "Package",
+              "version": "[8.0.31, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -235,7 +232,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

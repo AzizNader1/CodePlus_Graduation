@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Application.Common.Models;
 using SkillSwap.Application.DTOs;
 using SkillSwap.Web.Services;
+using Microsoft.AspNetCore.Authentication.Google;
+
 
 namespace SkillSwap.Web.Controllers;
 
@@ -264,4 +266,79 @@ public class AuthController : Controller
 
         HttpContext.Session.SetString("AccessToken", auth.AccessToken ?? string.Empty);
     }
+
+    [HttpGet]
+public IActionResult GoogleLogin(string? returnUrl = null)
+{
+    var redirectUrl = Url.Action(
+        nameof(GoogleCallback),
+        "Auth",
+        new { returnUrl });
+
+    var properties = new AuthenticationProperties
+    {
+        RedirectUri = redirectUrl
+    };
+
+    return Challenge(
+        properties,
+        GoogleDefaults.AuthenticationScheme);
+}
+
+[HttpGet]
+public async Task<IActionResult> GoogleCallback(string? returnUrl = null)
+{
+    var result = await HttpContext.AuthenticateAsync(
+        GoogleDefaults.AuthenticationScheme);
+
+    if (!result.Succeeded)
+    {
+        TempData["Error"] = "Google authentication failed.";
+        return RedirectToAction("Login");
+    }
+
+    var idToken = result.Properties?.GetTokenValue("id_token");
+
+    // if (string.IsNullOrEmpty(idToken))
+    // {
+    //     TempData["Error"] = "Google did not return an ID token.";
+    //     return RedirectToAction("Login");
+    // }
+
+    var request = new GoogleLoginRequest
+    {
+        IdToken = idToken
+    };
+
+    var response = await _apiClient.PostAsync<AuthResponseDTO>(
+        "Auth/GoogleLogin",
+        request);
+
+    if (response == null ||
+        !response.IsSuccess ||
+        response.Data == null)
+    {
+        TempData["Error"] =
+            response?.Message ?? "Failed to authenticate with Google.";
+
+        return RedirectToAction("Login");
+    }
+
+    await SignInUserAsync(response.Data);
+
+    var displayName =
+        response.Data.User?.FullName ?? "Google User";
+
+    TempData["Success"] =
+        $"Welcome, {displayName}!";
+
+    if (!string.IsNullOrEmpty(returnUrl) &&
+        Url.IsLocalUrl(returnUrl))
+    {
+        return Redirect(returnUrl);
+    }
+
+    return RedirectToAction("Index", "Discover");
+}
+
 }
