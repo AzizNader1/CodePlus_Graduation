@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "SkillSwap.Web/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNetCore.Authentication.Google": "8.0.31",
           "SkillSwap.Application": "1.0.0"
         },
         "runtime": {
@@ -51,6 +52,14 @@
           "lib/netstandard2.0/MediatR.Contracts.dll": {
             "assemblyVersion": "2.0.1.0",
             "fileVersion": "2.0.1.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Google/8.0.31": {
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "assemblyVersion": "8.0.31.0",
+            "fileVersion": "8.0.3126.42125"
           }
         }
       },
@@ -246,6 +255,13 @@
       "sha512": "sha512-FYv95bNT4UwcNA+G/J1oX5OpRiSUxteXaUt2BJbRSdRNiIUNbggJF69wy6mnk2wYToaanpdXZdCwVylt96MpwQ==",
       "path": "mediatr.contracts/2.0.1",
       "hashPath": "mediatr.contracts.2.0.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Google/8.0.31": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GTwXLkCCWtct34Q7zrES0XoUwJcLvbFegV7HEJNsjRXTuaC5MbKfGtBvSalDk40FmCaaH2l9ZNP0yx25e4fmpA==",
+      "path": "microsoft.aspnetcore.authentication.google/8.0.31",
+      "hashPath": "microsoft.aspnetcore.authentication.google.8.0.31.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Cryptography.Internal/8.0.11": {
       "type": "package",

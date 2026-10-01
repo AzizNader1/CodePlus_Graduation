@@ -77,13 +77,24 @@
 
                 <div class="row g-2 mb-4">
                     <div class="col-4">
-                        <form asp-action="ExternalLogin" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
-                            <input type="hidden" name="provider" value="Google" />
-                            <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1" type="submit" id="btnGoogleLogin" title="Sign in with Google">
-                                <i class="bi bi-google text-danger"></i>
-                                <span class="small fw-semibold d-none d-sm-inline">Google</span>
-                            </button>
-                        </form>
+                  <form asp-action="GoogleLogin"
+      method="get"
+      asp-route-returnUrl="@ViewData["ReturnUrl"]">
+
+    <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1"
+            type="submit"
+            id="btnGoogleLogin"
+            title="Sign in with Google">
+
+        <i class="bi bi-google text-danger"></i>
+        <span class="small fw-semibold d-none d-sm-inline">
+            Google
+        </span>
+
+    </button>
+</form>
+
+
                     </div>
                     <div class="col-4">
                         <form asp-action="ExternalLogin" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">

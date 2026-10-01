@@ -110,4 +110,5 @@ C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\Skill
 C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Web\obj\Debug\net8.0\SkillSwap.Web.pdb
 C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Web\obj\Debug\net8.0\SkillSwap.Web.genruntimeconfig.cache
 C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Web\obj\Debug\net8.0\ref\SkillSwap.Web.dll
+C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Web\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Web\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
