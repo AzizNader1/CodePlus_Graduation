@@ -97,7 +97,7 @@
                                 }
 
                                 <div class="mt-auto pt-2 border-top d-flex gap-2">
-                                    @if (swap.Status == SwapRequestStatus.Pending || swap.Status == SwapRequestStatus.CounterOffered)
+                                    @if (swap.Status == SwapRequestStatus.Pending)
                                     {
                                         <form asp-action="Accept" method="post" class="flex-grow-1">
                                             <input type="hidden" name="swapRequestId" value="@swap.Id" />
@@ -116,6 +116,12 @@
                                                 Reject
                                             </button>
                                         </form>
+                                    }
+                                    else if (swap.Status == SwapRequestStatus.CounterOffered)
+                                    {
+                                        <div class="w-100 text-center text-muted small py-1 bg-light rounded-pill">
+                                            <i class="bi bi-hourglass-split text-warning me-1"></i> Counter-offer sent & awaiting response
+                                        </div>
                                     }
                                     else if (swap.Status == SwapRequestStatus.Accepted)
                                     {
@@ -231,7 +237,40 @@
                                     <span><i class="bi bi-clock me-1 text-primary"></i>@swap.DurationMinutes mins</span>
                                 </div>
 
-                                @if (swap.Status == SwapRequestStatus.Accepted)
+                                @if (swap.Status == SwapRequestStatus.CounterOffered && swap.CounterProposedDate.HasValue)
+                                {
+                                    <div class="p-3 bg-warning-subtle text-dark rounded-4 mb-3 border border-warning">
+                                        <div class="d-flex align-items-center gap-1 mb-1 fw-bold small text-warning-emphasis">
+                                            <i class="bi bi-clock-history"></i> Counter-Offer Received
+                                        </div>
+                                        <div class="small mb-1">
+                                            <strong>Proposed Time:</strong> @swap.CounterProposedDate.Value.ToString("ddd, MMM dd - hh:mm tt")
+                                        </div>
+                                        <div class="small mb-1">
+                                            <strong>Duration:</strong> @(swap.CounterDurationMinutes ?? swap.DurationMinutes) minutes
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(swap.CounterNotes))
+                                        {
+                                            <div class="small fst-italic text-muted">"@swap.CounterNotes"</div>
+                                        }
+                                    </div>
+
+                                    <div class="mt-auto pt-2 border-top d-flex gap-2">
+                                        <form asp-action="Accept" method="post" class="flex-grow-1">
+                                            <input type="hidden" name="swapRequestId" value="@swap.Id" />
+                                            <button type="submit" class="btn btn-success btn-sm w-100 rounded-pill">
+                                                <i class="bi bi-check-lg me-1"></i> Accept Counter-Offer
+                                            </button>
+                                        </form>
+                                        <form asp-action="Reject" method="post">
+                                            <input type="hidden" name="swapRequestId" value="@swap.Id" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
+                                                Decline
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                                else if (swap.Status == SwapRequestStatus.Accepted)
                                 {
                                     <div class="mt-auto pt-2 border-top">
                                         <a class="btn btn-primary-custom btn-sm w-100" asp-controller="Sessions" asp-action="Index">

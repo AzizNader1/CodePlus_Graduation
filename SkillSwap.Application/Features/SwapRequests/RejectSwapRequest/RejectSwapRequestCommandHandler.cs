@@ -29,17 +29,21 @@ public class RejectSwapRequestCommandHandler : IRequestHandler<RejectSwapRequest
         if (swapRequest == null)
             return Result<bool>.Failure("Swap request not found.");
 
-        if (swapRequest.ReceiverId != _currentUser.UserId.Value)
+        var userId = _currentUser.UserId.Value;
+        if (swapRequest.ReceiverId != userId && swapRequest.RequesterId != userId)
             return Result<bool>.Failure("Forbidden");
 
         swapRequest.Status = SwapRequestStatus.Rejected;
         swapRequest.RejectionReason = command.Request.Reason;
 
+        var otherPartyId = swapRequest.ReceiverId == userId ? swapRequest.RequesterId : swapRequest.ReceiverId;
         var notif = new Notification
         {
-            UserId = swapRequest.RequesterId,
+            UserId = otherPartyId,
             Title = "Swap Request Declined",
-            Message = "Your swap proposal was declined.",
+            Message = !string.IsNullOrEmpty(command.Request.Reason)
+                ? $"The swap proposal was declined: {command.Request.Reason}"
+                : "The swap proposal was declined.",
             Type = NotificationType.SwapRequestRejected,
             TargetReferenceId = swapRequest.Id
         };

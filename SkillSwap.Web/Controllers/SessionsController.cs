@@ -37,7 +37,7 @@ public class SessionsController : Controller
 
         if (response == null || !response.IsSuccess || response.Data == null)
         {
-            TempData["Error"] = response?.Message ?? "Session not found.";
+            TempData["Error"] = response?.Message ?? "We couldn't locate this session. It may have been completed or cancelled.";
             return RedirectToAction("Index");
         }
 
@@ -57,7 +57,7 @@ public class SessionsController : Controller
 
         if (session == null)
         {
-            TempData["Error"] = "Unable to enter session room.";
+            TempData["Error"] = "We couldn't open the video call room. Please ensure your session is active and try again.";
             return RedirectToAction("Index");
         }
 
@@ -74,7 +74,7 @@ public class SessionsController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to mark session completed.";
+            TempData["Error"] = response?.Message ?? "We couldn't confirm completion for this session. Please try again.";
         }
         else
         {
@@ -93,11 +93,11 @@ public class SessionsController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to cancel session.";
+            TempData["Error"] = response?.Message ?? "We couldn't cancel this session right now. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Session cancelled.";
+            TempData["Success"] = "Your session has been cancelled.";
         }
 
         return RedirectToAction("Index");

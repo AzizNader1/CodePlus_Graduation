@@ -20,7 +20,7 @@ public class ProfileController : Controller
         var response = await _apiClient.GetAsync<UserProfileDTO>("Profile/GetProfile");
         if (response == null || !response.IsSuccess || response.Data == null)
         {
-            TempData["Error"] = response?.Message ?? "Unable to load profile.";
+            TempData["Error"] = response?.Message ?? "We couldn't load your profile details right now. Please try again.";
             return RedirectToAction("Index", "Home");
         }
 
@@ -40,7 +40,7 @@ public class ProfileController : Controller
 
         if (profile == null)
         {
-            TempData["Error"] = "Unable to load profile for editing.";
+            TempData["Error"] = "We couldn't open the profile editor right now. Please try again.";
             return RedirectToAction("Index");
         }
 
@@ -66,11 +66,11 @@ public class ProfileController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to update profile.";
+            TempData["Error"] = response?.Message ?? "We couldn't save your profile changes. Please check the details and try again.";
             return RedirectToAction("Edit");
         }
 
-        TempData["Success"] = "Profile details updated successfully!";
+        TempData["Success"] = "Your profile details have been updated successfully!";
         return RedirectToAction("Index");
     }
 
@@ -80,7 +80,7 @@ public class ProfileController : Controller
     {
         if (file == null || file.Length == 0)
         {
-            TempData["Error"] = "Please select an image file to upload.";
+            TempData["Error"] = "Please select a photo (JPG, PNG, or WebP) to upload as your profile avatar.";
             return RedirectToAction("Index");
         }
 
@@ -88,11 +88,11 @@ public class ProfileController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to upload avatar.";
+            TempData["Error"] = response?.Message ?? "We couldn't upload your picture. Please try another image (under 5MB).";
             return RedirectToAction("Index");
         }
 
-        TempData["Success"] = "Avatar uploaded successfully!";
+        TempData["Success"] = "Your profile picture has been updated!";
         return RedirectToAction("Index");
     }
 
@@ -104,11 +104,11 @@ public class ProfileController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to add offered skill.";
+            TempData["Error"] = response?.Message ?? "We couldn't add this skill to your teaching list. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Offered skill added to profile!";
+            TempData["Success"] = "Skill added to your teaching list!";
         }
 
         return RedirectToAction("Index");
@@ -122,11 +122,11 @@ public class ProfileController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to remove skill.";
+            TempData["Error"] = response?.Message ?? "We couldn't remove this skill from your profile. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Offered skill removed successfully.";
+            TempData["Success"] = "The skill was removed from your teaching list.";
         }
 
         return RedirectToAction("Index");
@@ -140,11 +140,11 @@ public class ProfileController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to add wanted skill.";
+            TempData["Error"] = response?.Message ?? "We couldn't add this skill to your learning wishlist. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Desired skill added to your wishlist!";
+            TempData["Success"] = "Skill added to your learning wishlist!";
         }
 
         return RedirectToAction("Index");
@@ -158,11 +158,11 @@ public class ProfileController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to remove wanted skill.";
+            TempData["Error"] = response?.Message ?? "We couldn't remove this skill from your learning wishlist. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Skill removed from wishlist.";
+            TempData["Success"] = "The skill was removed from your learning wishlist.";
         }
 
         return RedirectToAction("Index");
@@ -177,7 +177,7 @@ public class ProfileController : Controller
 
         if (response == null || !response.IsSuccess || response.Data == null)
         {
-            TempData["Error"] = response?.Message ?? "User profile not found.";
+            TempData["Error"] = response?.Message ?? "We couldn't find the profile you were looking for.";
             return RedirectToAction("Index", "Discover");
         }
 

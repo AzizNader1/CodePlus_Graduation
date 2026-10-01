@@ -64,11 +64,11 @@ public class SwapRequestsController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to create swap request.";
+            TempData["Error"] = response?.Message ?? "We couldn't send your swap proposal. Please check the details and try again.";
             return RedirectToAction("Create", new { recipientId = request.ReceiverId });
         }
 
-        TempData["Success"] = "Swap request sent successfully! You can track its status below.";
+        TempData["Success"] = "Your swap request was sent successfully! You can track its progress below.";
         return RedirectToAction("Index");
     }
 
@@ -80,11 +80,11 @@ public class SwapRequestsController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to accept swap request.";
+            TempData["Error"] = response?.Message ?? "We couldn't accept this swap request right now. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Swap request accepted! A swap session has been automatically scheduled.";
+            TempData["Success"] = "Swap request accepted! Your learning session has been automatically scheduled.";
         }
 
         return RedirectToAction("Index");
@@ -94,16 +94,16 @@ public class SwapRequestsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Reject(Guid swapRequestId, string? reason)
     {
-        var request = new RejectRequest { Reason = reason ?? "Unable to accommodate proposal." };
+        var request = new RejectRequest { Reason = reason ?? "Unable to accommodate proposal at this time." };
         var response = await _apiClient.PostCommandAsync($"SwapRequests/Reject/{swapRequestId}", request);
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to reject swap request.";
+            TempData["Error"] = response?.Message ?? "We couldn't decline this swap request right now. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Swap request rejected.";
+            TempData["Success"] = "The swap request has been declined.";
         }
 
         return RedirectToAction("Index");
@@ -124,11 +124,11 @@ public class SwapRequestsController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to submit counter offer.";
+            TempData["Error"] = response?.Message ?? "We couldn't send your counter proposal right now. Please try again.";
         }
         else
         {
-            TempData["Success"] = "Counter offer submitted successfully!";
+            TempData["Success"] = "Your proposed changes have been sent to your learning partner!";
         }
 
         return RedirectToAction("Index");

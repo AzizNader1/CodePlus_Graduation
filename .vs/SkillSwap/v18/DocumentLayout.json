@@ -1,9 +1,25 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\",
+  "WorkspaceRootPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AD64DA66-5E6D-417D-9F1E-E9B562CE83A4}|SkillSwap.Web\\SkillSwap.Web.csproj|c:\\users\\azizn\\onedrive\\desktop\\code plus sessions\\codeplus_graduation\\skillswap.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{AD64DA66-5E6D-417D-9F1E-E9B562CE83A4}|SkillSwap.Web\\SkillSwap.Web.csproj|c:\\users\\azizn\\onedrive\\desktop\\code plus sessions\\new\\codeplus_graduation\\skillswap.web\\services\\skillswapapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD64DA66-5E6D-417D-9F1E-E9B562CE83A4}|SkillSwap.Web\\SkillSwap.Web.csproj|solutionrelative:skillswap.web\\services\\skillswapapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AD64DA66-5E6D-417D-9F1E-E9B562CE83A4}|SkillSwap.Web\\SkillSwap.Web.csproj|c:\\users\\azizn\\onedrive\\desktop\\code plus sessions\\new\\codeplus_graduation\\skillswap.web\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AD64DA66-5E6D-417D-9F1E-E9B562CE83A4}|SkillSwap.Web\\SkillSwap.Web.csproj|solutionrelative:skillswap.web\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{67E79622-D4E7-443A-B1BD-7AE9C04A0259}|SkillSwap.Api\\SkillSwap.Api.csproj|c:\\users\\azizn\\onedrive\\desktop\\code plus sessions\\new\\codeplus_graduation\\skillswap.api\\controllers\\discovercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{67E79622-D4E7-443A-B1BD-7AE9C04A0259}|SkillSwap.Api\\SkillSwap.Api.csproj|solutionrelative:skillswap.api\\controllers\\discovercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{67E79622-D4E7-443A-B1BD-7AE9C04A0259}|SkillSwap.Api\\SkillSwap.Api.csproj|c:\\users\\azizn\\onedrive\\desktop\\code plus sessions\\new\\codeplus_graduation\\skillswap.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{67E79622-D4E7-443A-B1BD-7AE9C04A0259}|SkillSwap.Api\\SkillSwap.Api.csproj|solutionrelative:skillswap.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AD64DA66-5E6D-417D-9F1E-E9B562CE83A4}|SkillSwap.Web\\SkillSwap.Web.csproj|c:\\users\\azizn\\onedrive\\desktop\\code plus sessions\\new\\codeplus_graduation\\skillswap.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{AD64DA66-5E6D-417D-9F1E-E9B562CE83A4}|SkillSwap.Web\\SkillSwap.Web.csproj|solutionrelative:skillswap.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
@@ -19,10 +35,62 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "SkillSwapApiClient.cs",
+              "DocumentMoniker": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Web\\Services\\SkillSwapApiClient.cs",
+              "RelativeDocumentMoniker": "SkillSwap.Web\\Services\\SkillSwapApiClient.cs",
+              "ToolTip": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Web\\Services\\SkillSwapApiClient.cs",
+              "RelativeToolTip": "SkillSwap.Web\\Services\\SkillSwapApiClient.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-30T16:52:15.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Web\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "SkillSwap.Web\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Web\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "SkillSwap.Web\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-30T16:50:57.721Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DiscoverController.cs",
+              "DocumentMoniker": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Api\\Controllers\\DiscoverController.cs",
+              "RelativeDocumentMoniker": "SkillSwap.Api\\Controllers\\DiscoverController.cs",
+              "ToolTip": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Api\\Controllers\\DiscoverController.cs",
+              "RelativeToolTip": "SkillSwap.Api\\Controllers\\DiscoverController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-30T16:50:35.656Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Api\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "SkillSwap.Api\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Api\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "SkillSwap.Api\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-30T16:50:22.364Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Web\\appsettings.json",
               "RelativeDocumentMoniker": "SkillSwap.Web\\appsettings.json",
-              "ToolTip": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Web\\appsettings.json",
+              "ToolTip": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Web\\appsettings.json",
               "RelativeToolTip": "SkillSwap.Web\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",

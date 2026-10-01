@@ -565,11 +565,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
       "projectName": "SkillSwap.Domain",
-      "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
+      "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
       "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\obj\\",
+      "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

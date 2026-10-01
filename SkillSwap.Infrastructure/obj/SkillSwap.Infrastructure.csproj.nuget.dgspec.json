@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj": {}
+    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
+    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
+        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
         "projectName": "SkillSwap.Application",
-        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
+        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj",
         "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\obj\\",
+        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -34,8 +34,8 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
-                "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj"
+              "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
+                "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj"
               }
             }
           }
@@ -90,14 +90,14 @@
         }
       }
     },
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
+    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
         "projectName": "SkillSwap.Domain",
-        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
+        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\SkillSwap.Domain.csproj",
         "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Domain\\obj\\",
+        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -164,14 +164,14 @@
         }
       }
     },
-    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj": {
+    "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj",
         "projectName": "SkillSwap.Infrastructure",
-        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Infrastructure\\SkillSwap.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\azizn\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -194,8 +194,8 @@
             "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
-                "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj"
+              "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj": {
+                "projectPath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Application\\SkillSwap.Application.csproj"
               }
             }
           }

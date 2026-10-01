@@ -38,11 +38,20 @@ public class AcceptSwapRequestCommandHandler : IRequestHandler<AcceptSwapRequest
         if (swapRequest == null)
             return Result<SwapSessionDTO>.Failure("Swap request not found.");
 
-        if (swapRequest.ReceiverId != _currentUser.UserId.Value)
-            return Result<SwapSessionDTO>.Failure("Only the recipient of this swap request can accept it.");
-
-        if (swapRequest.Status != SwapRequestStatus.Pending && swapRequest.Status != SwapRequestStatus.CounterOffered)
+        if (swapRequest.Status == SwapRequestStatus.Pending)
+        {
+            if (swapRequest.ReceiverId != _currentUser.UserId.Value)
+                return Result<SwapSessionDTO>.Failure("Only the recipient of this swap request can accept it.");
+        }
+        else if (swapRequest.Status == SwapRequestStatus.CounterOffered)
+        {
+            if (swapRequest.RequesterId != _currentUser.UserId.Value)
+                return Result<SwapSessionDTO>.Failure("Only the original requester can accept the counter-offer.");
+        }
+        else
+        {
             return Result<SwapSessionDTO>.Failure($"Request is in {swapRequest.Status} state and cannot be accepted.");
+        }
 
         swapRequest.Status = SwapRequestStatus.Accepted;
 
@@ -87,11 +96,18 @@ public class AcceptSwapRequestCommandHandler : IRequestHandler<AcceptSwapRequest
         };
         _context.Messages.Add(welcomeMsg);
 
+        var otherPartyId = _currentUser.UserId.Value == swapRequest.ReceiverId 
+            ? swapRequest.RequesterId 
+            : swapRequest.ReceiverId;
+        var acceptorName = _currentUser.UserId.Value == swapRequest.ReceiverId 
+            ? swapRequest.Receiver.FullName 
+            : swapRequest.Requester.FullName;
+
         var notif = new Notification
         {
-            UserId = swapRequest.RequesterId,
+            UserId = otherPartyId,
             Title = "Swap Request Accepted!",
-            Message = $"{swapRequest.Receiver.FullName} accepted your swap request. Session is scheduled for {session.ScheduledStartTime:g}.",
+            Message = $"{acceptorName} accepted the swap agreement. Session is scheduled for {session.ScheduledStartTime:g}.",
             Type = NotificationType.SwapRequestAccepted,
             TargetReferenceId = session.Id
         };
@@ -99,7 +115,7 @@ public class AcceptSwapRequestCommandHandler : IRequestHandler<AcceptSwapRequest
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        await _signalR.SendMessageToUserAsync(swapRequest.RequesterId, "ReceiveNotification", new
+        await _signalR.SendMessageToUserAsync(otherPartyId, "ReceiveNotification", new
         {
             notif.Id,
             notif.Title,

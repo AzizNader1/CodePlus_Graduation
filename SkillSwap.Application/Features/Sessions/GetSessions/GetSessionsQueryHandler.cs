@@ -23,7 +23,7 @@ public class GetSessionsQueryHandler : IRequestHandler<GetSessionsQuery, Result<
     public async Task<Result<ICollection<SwapSessionDTO>>> Handle(GetSessionsQuery query, CancellationToken cancellationToken)
     {
         if (_currentUser.UserId == null)
-            return Result<ICollection<SwapSessionDTO>>.Failure("Unauthorized");
+            return Result<ICollection<SwapSessionDTO>>.Failure("Please sign in to view your sessions.");
 
         var userId = _currentUser.UserId.Value;
 
@@ -52,7 +52,8 @@ public class GetSessionsQueryHandler : IRequestHandler<GetSessionsQuery, Result<
             Status = s.Status,
             HostConfirmedCompleted = s.HostConfirmedCompleted,
             ParticipantConfirmedCompleted = s.ParticipantConfirmedCompleted,
-            CompletedAt = s.CompletedAt
+            CompletedAt = s.CompletedAt,
+            HasCurrentUserReviewed = s.Reviews.Any(r => r.ReviewerId == userId && !r.IsDeleted)
         }).ToListAsync(cancellationToken);
 
         return Result<ICollection<SwapSessionDTO>>.Success(list);

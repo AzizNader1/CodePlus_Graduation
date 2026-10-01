@@ -25,4 +25,5 @@ public class SwapSessionDTO
     public bool HostConfirmedCompleted { get; set; }
     public bool ParticipantConfirmedCompleted { get; set; }
     public DateTime? CompletedAt { get; set; }
+    public bool HasCurrentUserReviewed { get; set; }
 }

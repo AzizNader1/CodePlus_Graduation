@@ -42,7 +42,7 @@ public class ExceptionHandlingMiddleware
         {
             case ValidationException valEx:
                 statusCode = (int)HttpStatusCode.BadRequest;
-                message = valEx.Message ?? "One or more validation errors occurred.";
+                message = !string.IsNullOrWhiteSpace(valEx.Message) && !valEx.Message.Contains("occurred") ? valEx.Message : "Please check the entered details and try again.";
                 errors = valEx.Errors.SelectMany(e => e.Value).ToArray();
                 break;
 
@@ -63,7 +63,7 @@ public class ExceptionHandlingMiddleware
 
             default:
                 statusCode = (int)HttpStatusCode.InternalServerError;
-                message = "An unexpected error occurred on the server.";
+                message = "We ran into an unexpected hiccup on the server. Please try again in a few moments.";
                 break;
         }
 

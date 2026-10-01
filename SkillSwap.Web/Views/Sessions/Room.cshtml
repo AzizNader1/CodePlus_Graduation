@@ -161,7 +161,10 @@
             try {
                 await fetch(`http://localhost:5200/api/v1/Sessions/Heartbeat/${sessionId}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer @User.FindFirst("AccessToken")?.Value'
+                    },
                     body: JSON.stringify({ inCall: true, timestamp: new Date().toISOString() })
                 });
                 document.getElementById('heartbeatStatus').innerText = 'Synced ' + new Date().toLocaleTimeString();

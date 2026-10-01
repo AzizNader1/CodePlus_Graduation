@@ -1,5 +1,5 @@
 $baseUrl = "http://localhost:5200/api/v1"
-$report = @()
+$global:report = @()
 
 function Test-ApiEndpoint {
     param(
@@ -89,47 +89,48 @@ function Test-ApiEndpoint {
     }
 }
 
-Write-Host "=== STARTING COMPREHENSIVE 51-ENDPOINT VERIFICATION ===" -ForegroundColor Cyan
+Write-Host "=== STARTING COMPREHENSIVE ENDPOINT VERIFICATION (ALL 57 ENDPOINTS) ===" -ForegroundColor Cyan
 
 # -------------------------------------------------------------
-# 1. AUTH CONTROLLER (10 Endpoints)
+# 1. AUTH CONTROLLER (11 Endpoints)
 # -------------------------------------------------------------
 $testEmail = "tester_$(Get-Random)@skillswap.app"
 $regRes = Test-ApiEndpoint -Controller "Auth" -Action "Register" -Method "POST" -Url "$baseUrl/Auth/Register" -Body @{
-    fullName = "Test User"
+    fullName = "Test Suite User"
     email = $testEmail
     password = "Password@123"
     location = "Austin, TX"
     timeZone = "UTC-6"
 }
 
-$loginRes = Test-ApiEndpoint -Controller "Auth" -Action "Login" -Method "POST" -Url "$baseUrl/Auth/Login" -Body @{
+$loginRes = Test-ApiEndpoint -Controller "Auth" -Action "Login (New User)" -Method "POST" -Url "$baseUrl/Auth/Login" -Body @{
     email = $testEmail
     password = "Password@123"
 }
-$testerToken = $loginRes.accessToken
-$testerRefreshToken = $loginRes.refreshToken
+$testerToken = $loginRes.data.accessToken
+$testerRefreshToken = $loginRes.data.refreshToken
+$testerUserId = $loginRes.data.user.id
 
 # Seeded Logins
 $aliceLogin = Test-ApiEndpoint -Controller "Auth" -Action "Login (Alice)" -Method "POST" -Url "$baseUrl/Auth/Login" -Body @{
     email = "alice@skillswap.app"
     password = "Password@123"
 }
-$aliceToken = $aliceLogin.accessToken
-$aliceId = $aliceLogin.user.id
+$aliceToken = $aliceLogin.data.accessToken
+$aliceId = $aliceLogin.data.user.id
 
 $bobLogin = Test-ApiEndpoint -Controller "Auth" -Action "Login (Bob)" -Method "POST" -Url "$baseUrl/Auth/Login" -Body @{
     email = "bob@skillswap.app"
     password = "Password@123"
 }
-$bobToken = $bobLogin.accessToken
-$bobId = $bobLogin.user.id
+$bobToken = $bobLogin.data.accessToken
+$bobId = $bobLogin.data.user.id
 
 $adminLogin = Test-ApiEndpoint -Controller "Auth" -Action "Login (Admin)" -Method "POST" -Url "$baseUrl/Auth/Login" -Body @{
     email = "admin@skillswap.app"
     password = "Admin@123456"
 }
-$adminToken = $adminLogin.accessToken
+$adminToken = $adminLogin.data.accessToken
 
 Test-ApiEndpoint -Controller "Auth" -Action "RefreshToken" -Method "POST" -Url "$baseUrl/Auth/RefreshToken" -Body @{
     accessToken = $testerToken
@@ -138,9 +139,9 @@ Test-ApiEndpoint -Controller "Auth" -Action "RefreshToken" -Method "POST" -Url "
 
 $twoFaRes = Test-ApiEndpoint -Controller "Auth" -Action "Enable2Fa" -Method "POST" -Url "$baseUrl/Auth/Enable2Fa" -Token $testerToken
 
-Test-ApiEndpoint -Controller "Auth" -Action "Confirm2Fa" -Method "POST" -Url "$baseUrl/Auth/Confirm2Fa" -Body "000000" -Token $testerToken -ExpectError $true
+Test-ApiEndpoint -Controller "Auth" -Action "Confirm2Fa" -Method "POST" -Url "$baseUrl/Auth/Confirm2Fa" -Body @{ code = "000000" } -Token $testerToken -ExpectError $true
 
-Test-ApiEndpoint -Controller "Auth" -Action "Disable2Fa" -Method "POST" -Url "$baseUrl/Auth/Disable2Fa" -Body "000000" -Token $testerToken -ExpectError $true
+Test-ApiEndpoint -Controller "Auth" -Action "Verify2Fa" -Method "POST" -Url "$baseUrl/Auth/Verify2Fa" -Body @{ twoFactorToken = "dummy_token"; code = "000000" } -ExpectError $true
 
 Test-ApiEndpoint -Controller "Auth" -Action "ForgotPassword" -Method "POST" -Url "$baseUrl/Auth/ForgotPassword" -Body @{
     email = $testEmail
@@ -160,8 +161,12 @@ Test-ApiEndpoint -Controller "Auth" -Action "AppleLogin" -Method "POST" -Url "$b
     identityToken = "invalid_token_sample"
 } -ExpectError $true
 
+Test-ApiEndpoint -Controller "Auth" -Action "FacebookLogin" -Method "POST" -Url "$baseUrl/Auth/FacebookLogin" -Body @{
+    accessToken = "invalid_token_sample"
+} -ExpectError $true
+
 # -------------------------------------------------------------
-# 2. PROFILE CONTROLLER (5 Endpoints)
+# 2. PROFILE CONTROLLER (4 Endpoints)
 # -------------------------------------------------------------
 Test-ApiEndpoint -Controller "Profile" -Action "GetProfile" -Method "GET" -Url "$baseUrl/Profile/GetProfile" -Token $aliceToken
 
@@ -190,9 +195,9 @@ $cats = Test-ApiEndpoint -Controller "Categories" -Action "GetCategories" -Metho
 # -------------------------------------------------------------
 $skills = Test-ApiEndpoint -Controller "Skills" -Action "GetSkills" -Method "GET" -Url "$baseUrl/Skills/GetSkills"
 
-$guitarSkill = $skills | Where-Object { $_.name -like "*Guitar*" } | Select-Object -First 1
-$csharpSkill = $skills | Where-Object { $_.name -like "*C#*" } | Select-Object -First 1
-$spanishSkill = $skills | Where-Object { $_.name -like "*Spanish*" } | Select-Object -First 1
+$guitarSkill = $skills.data | Where-Object { $_.name -like "*Guitar*" } | Select-Object -First 1
+$csharpSkill = $skills.data | Where-Object { $_.name -like "*C#*" } | Select-Object -First 1
+$spanishSkill = $skills.data | Where-Object { $_.name -like "*Spanish*" } | Select-Object -First 1
 
 $addedOffered = Test-ApiEndpoint -Controller "Skills" -Action "AddOfferedSkill" -Method "POST" -Url "$baseUrl/Skills/AddOfferedSkill" -Body @{
     skillId = $guitarSkill.id
@@ -201,8 +206,8 @@ $addedOffered = Test-ApiEndpoint -Controller "Skills" -Action "AddOfferedSkill" 
     description = "Acoustic chords and fingerpicking."
 } -Token $testerToken
 
-if ($addedOffered) {
-    Test-ApiEndpoint -Controller "Skills" -Action "DeleteOfferedSkill" -Method "DELETE" -Url "$baseUrl/Skills/DeleteOfferedSkill/$($addedOffered.id)" -Token $testerToken
+if ($addedOffered -and $addedOffered.data) {
+    Test-ApiEndpoint -Controller "Skills" -Action "DeleteOfferedSkill" -Method "DELETE" -Url "$baseUrl/Skills/DeleteOfferedSkill/$($addedOffered.data.id)" -Token $testerToken
 }
 
 $addedWanted = Test-ApiEndpoint -Controller "Skills" -Action "AddWantedSkill" -Method "POST" -Url "$baseUrl/Skills/AddWantedSkill" -Body @{
@@ -212,8 +217,8 @@ $addedWanted = Test-ApiEndpoint -Controller "Skills" -Action "AddWantedSkill" -M
     description = "Want to learn conversational Spanish."
 } -Token $testerToken
 
-if ($addedWanted) {
-    Test-ApiEndpoint -Controller "Skills" -Action "DeleteWantedSkill" -Method "DELETE" -Url "$baseUrl/Skills/DeleteWantedSkill/$($addedWanted.id)" -Token $testerToken
+if ($addedWanted -and $addedWanted.data) {
+    Test-ApiEndpoint -Controller "Skills" -Action "DeleteWantedSkill" -Method "DELETE" -Url "$baseUrl/Skills/DeleteWantedSkill/$($addedWanted.data.id)" -Token $testerToken
 }
 
 # -------------------------------------------------------------
@@ -237,22 +242,22 @@ $swapReq = Test-ApiEndpoint -Controller "SwapRequests" -Action "Create" -Method 
     notes = "New swap proposal test."
 } -Token $aliceToken
 
-$swapId = $swapReq.id
+$swapId = $swapReq.data.id
 
 Test-ApiEndpoint -Controller "SwapRequests" -Action "GetIncoming" -Method "GET" -Url "$baseUrl/SwapRequests/GetIncoming" -Token $bobToken
 
 Test-ApiEndpoint -Controller "SwapRequests" -Action "GetOutgoing" -Method "GET" -Url "$baseUrl/SwapRequests/GetOutgoing" -Token $aliceToken
 
 # Counter offer by Bob
-Test-ApiEndpoint -Controller "SwapRequests" -Action "CounterOffer" -Method "PUT" -Url "$baseUrl/SwapRequests/CounterOffer/$swapId" -Body @{
-    counterProposedDate = (Get-Date).AddDays(4).ToString("o")
-    counterDurationMinutes = 60
+Test-ApiEndpoint -Controller "SwapRequests" -Action "CounterOffer" -Method "POST" -Url "$baseUrl/SwapRequests/CounterOffer/$swapId" -Body @{
+    newProposedDate = (Get-Date).AddDays(4).ToString("o")
+    newDurationMinutes = 60
     counterNotes = "How about 4 days from now instead?"
 } -Token $bobToken
 
-# Accept by Alice
-$acceptedSession = Test-ApiEndpoint -Controller "SwapRequests" -Action "Accept" -Method "PUT" -Url "$baseUrl/SwapRequests/Accept/$swapId" -Token $aliceToken
-$sessionId = $acceptedSession.id
+# Accept counter offer by Alice (Verified working after fix!)
+$acceptedSession = Test-ApiEndpoint -Controller "SwapRequests" -Action "Accept" -Method "POST" -Url "$baseUrl/SwapRequests/Accept/$swapId" -Token $aliceToken
+$sessionId = $acceptedSession.data.id
 
 # Create second proposal for Reject test
 $swapReq2 = Test-ApiEndpoint -Controller "SwapRequests" -Action "Create (For Reject)" -Method "POST" -Url "$baseUrl/SwapRequests/Create" -Body @{
@@ -264,28 +269,41 @@ $swapReq2 = Test-ApiEndpoint -Controller "SwapRequests" -Action "Create (For Rej
     notes = "Proposal to be rejected test."
 } -Token $aliceToken
 
-if ($swapReq2) {
-    Test-ApiEndpoint -Controller "SwapRequests" -Action "Reject" -Method "PUT" -Url "$baseUrl/SwapRequests/Reject/$($swapReq2.id)" -Body @{
+if ($swapReq2 -and $swapReq2.data) {
+    Test-ApiEndpoint -Controller "SwapRequests" -Action "Reject" -Method "POST" -Url "$baseUrl/SwapRequests/Reject/$($swapReq2.data.id)" -Body @{
         reason = "Currently fully booked."
     } -Token $bobToken
 }
 
 # -------------------------------------------------------------
-# 7. SESSIONS CONTROLLER (4 Endpoints)
+# 7. SESSIONS CONTROLLER (9 Endpoints)
 # -------------------------------------------------------------
 Test-ApiEndpoint -Controller "Sessions" -Action "GetSessions" -Method "GET" -Url "$baseUrl/Sessions/GetSessions" -Token $bobToken
 
 Test-ApiEndpoint -Controller "Sessions" -Action "GetById" -Method "GET" -Url "$baseUrl/Sessions/GetById/$sessionId" -Token $bobToken
 
-Test-ApiEndpoint -Controller "Sessions" -Action "Complete (Alice)" -Method "PUT" -Url "$baseUrl/Sessions/Complete/$sessionId" -Body @{
+Test-ApiEndpoint -Controller "Sessions" -Action "Join" -Method "POST" -Url "$baseUrl/Sessions/Join/$sessionId" -Token $aliceToken
+
+Test-ApiEndpoint -Controller "Sessions" -Action "Heartbeat" -Method "POST" -Url "$baseUrl/Sessions/Heartbeat/$sessionId" -Token $aliceToken -Body @{
+    inCall = $true
+    timestamp = (Get-Date).ToString("o")
+}
+
+Test-ApiEndpoint -Controller "Sessions" -Action "CallStatus" -Method "GET" -Url "$baseUrl/Sessions/CallStatus/$sessionId" -Token $bobToken
+
+Test-ApiEndpoint -Controller "Sessions" -Action "IceServers" -Method "GET" -Url "$baseUrl/Sessions/IceServers/$sessionId" -Token $aliceToken
+
+Test-ApiEndpoint -Controller "Sessions" -Action "Leave" -Method "POST" -Url "$baseUrl/Sessions/Leave/$sessionId" -Token $aliceToken
+
+Test-ApiEndpoint -Controller "Sessions" -Action "Complete (Alice)" -Method "POST" -Url "$baseUrl/Sessions/Complete/$sessionId" -Body @{
     notes = "Session went smoothly."
 } -Token $aliceToken
 
-Test-ApiEndpoint -Controller "Sessions" -Action "Complete (Bob)" -Method "PUT" -Url "$baseUrl/Sessions/Complete/$sessionId" -Body @{
+Test-ApiEndpoint -Controller "Sessions" -Action "Complete (Bob)" -Method "POST" -Url "$baseUrl/Sessions/Complete/$sessionId" -Body @{
     notes = "Mutual completion confirmed."
 } -Token $bobToken
 
-# Cancel test on a new session
+# Cancel test on a separate session
 $swapReq3 = Test-ApiEndpoint -Controller "SwapRequests" -Action "Create (For Cancel)" -Method "POST" -Url "$baseUrl/SwapRequests/Create" -Body @{
     receiverId = $bobId
     offeredSkillId = $csharpSkill.id
@@ -295,10 +313,10 @@ $swapReq3 = Test-ApiEndpoint -Controller "SwapRequests" -Action "Create (For Can
     notes = "Proposal for cancel test."
 } -Token $aliceToken
 
-if ($swapReq3) {
-    $cancelSession = Test-ApiEndpoint -Controller "SwapRequests" -Action "Accept (For Cancel)" -Method "PUT" -Url "$baseUrl/SwapRequests/Accept/$($swapReq3.id)" -Token $bobToken
-    if ($cancelSession) {
-        Test-ApiEndpoint -Controller "Sessions" -Action "Cancel" -Method "PUT" -Url "$baseUrl/Sessions/Cancel/$($cancelSession.id)" -Body @{
+if ($swapReq3 -and $swapReq3.data) {
+    $cancelSession = Test-ApiEndpoint -Controller "SwapRequests" -Action "Accept (For Cancel)" -Method "POST" -Url "$baseUrl/SwapRequests/Accept/$($swapReq3.data.id)" -Token $bobToken
+    if ($cancelSession -and $cancelSession.data) {
+        Test-ApiEndpoint -Controller "Sessions" -Action "Cancel" -Method "POST" -Url "$baseUrl/Sessions/Cancel/$($cancelSession.data.id)" -Body @{
             reason = "Scheduling conflict arose."
         } -Token $aliceToken
     }
@@ -308,10 +326,10 @@ if ($swapReq3) {
 # 8. CHAT CONTROLLER (3 Endpoints)
 # -------------------------------------------------------------
 $convs = Test-ApiEndpoint -Controller "Chat" -Action "GetConversations" -Method "GET" -Url "$baseUrl/Chat/GetConversations" -Token $aliceToken
-$convId = $convs[0].id
+$convId = $convs.data[0].id
 
 Test-ApiEndpoint -Controller "Chat" -Action "SendMessage" -Method "POST" -Url "$baseUrl/Chat/SendMessage/$convId" -Body @{
-    content = "Automated test message for 51-endpoint verification."
+    content = "Automated test message for endpoint verification."
 } -Token $aliceToken
 
 Test-ApiEndpoint -Controller "Chat" -Action "GetMessages" -Method "GET" -Url "$baseUrl/Chat/GetMessages/$convId" -Token $bobToken
@@ -335,8 +353,8 @@ Test-ApiEndpoint -Controller "Reviews" -Action "GetUserReviews" -Method "GET" -U
 # -------------------------------------------------------------
 $notifs = Test-ApiEndpoint -Controller "Notifications" -Action "GetNotifications" -Method "GET" -Url "$baseUrl/Notifications/GetNotifications" -Token $aliceToken
 
-if ($notifs.items -and $notifs.items.Count -gt 0) {
-    $notifId = $notifs.items[0].id
+if ($notifs -and $notifs.data -and $notifs.data.items -and $notifs.data.items.Count -gt 0) {
+    $notifId = $notifs.data.items[0].id
     Test-ApiEndpoint -Controller "Notifications" -Action "MarkAsRead" -Method "PUT" -Url "$baseUrl/Notifications/MarkAsRead/$notifId" -Token $aliceToken
 }
 
@@ -380,19 +398,19 @@ Test-ApiEndpoint -Controller "Admin" -Action "GetStats" -Method "GET" -Url "$bas
 
 $adminReports = Test-ApiEndpoint -Controller "Admin" -Action "GetReports" -Method "GET" -Url "$baseUrl/Admin/GetReports" -Token $adminToken
 
-if ($adminReports -and $adminReports.Count -gt 0) {
-    $reportToResolve = $adminReports | Where-Object { $_.status -eq "Pending" } | Select-Object -First 1
+if ($adminReports -and $adminReports.data -and $adminReports.data.Count -gt 0) {
+    $reportToResolve = $adminReports.data | Where-Object { $_.status -eq "Pending" } | Select-Object -First 1
     if ($reportToResolve) {
         Test-ApiEndpoint -Controller "Admin" -Action "ResolveReport" -Method "PUT" -Url "$baseUrl/Admin/ResolveReport/$($reportToResolve.id)" -Body @{
             status = "Resolved"
-            adminNotes = "Resolved during 51-endpoint verification test."
+            adminNotes = "Resolved during 57-endpoint verification test."
         } -Token $adminToken
     }
 }
 
-Test-ApiEndpoint -Controller "Admin" -Action "UpdateUserStatus" -Method "PUT" -Url "$baseUrl/Admin/UpdateUserStatus/$testerTokenUser?isActive=true" -Token $adminToken
+Test-ApiEndpoint -Controller "Admin" -Action "UpdateUserStatus" -Method "PUT" -Url "$baseUrl/Admin/UpdateUserStatus/${testerUserId}?isActive=true" -Token $adminToken
 
 # Save Report JSON
-$outputPath = "C:\Users\azizn\.gemini\antigravity\brain\bdb8028a-0dd3-466a-9d04-471d3c2ff3b5\FULL_ALL_ENDPOINTS_TEST_RESULTS.json"
+$outputPath = Join-Path $PSScriptRoot "FULL_ALL_ENDPOINTS_TEST_RESULTS.json"
 $global:report | ConvertTo-Json -Depth 5 | Out-File -FilePath $outputPath -Encoding utf8
-Write-Host "=== ENDPOINT VERIFICATION COMPLETED: $($global:report.Count) TEST CASES RUN ===" -ForegroundColor Cyan
+Write-Host "=== ENDPOINT VERIFICATION COMPLETED: $($global:report.Count) TEST CASES RUN. RESULTS SAVED TO $outputPath ===" -ForegroundColor Cyan

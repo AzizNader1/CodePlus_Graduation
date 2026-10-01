@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mUh0EqjqM8s=",
+  "dgSpecHash": "3YY//2QF+4g=",
   "success": true,
-  "projectFilePath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\CodePlus_Graduation\\SkillSwap.Api\\SkillSwap.Api.csproj",
+  "projectFilePath": "C:\\Users\\azizn\\OneDrive\\Desktop\\Code Plus Sessions\\New\\CodePlus_Graduation\\SkillSwap.Api\\SkillSwap.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\azizn\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\azizn\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

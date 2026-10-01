@@ -23,7 +23,7 @@ public class GetSessionByIdQueryHandler : IRequestHandler<GetSessionByIdQuery, R
     public async Task<Result<SwapSessionDTO>> Handle(GetSessionByIdQuery query, CancellationToken cancellationToken)
     {
         if (_currentUser.UserId == null)
-            return Result<SwapSessionDTO>.Failure("Unauthorized");
+            return Result<SwapSessionDTO>.Failure("Please sign in to view this session.");
 
         var s = await _context.SwapSessions
             .Include(ss => ss.HostUser)
@@ -31,10 +31,10 @@ public class GetSessionByIdQueryHandler : IRequestHandler<GetSessionByIdQuery, R
             .FirstOrDefaultAsync(ss => ss.Id == query.Id && !ss.IsDeleted, cancellationToken);
 
         if (s == null)
-            return Result<SwapSessionDTO>.Failure("Session not found.");
+            return Result<SwapSessionDTO>.Failure("We couldn't locate this session. It may have been completed or removed.");
 
         if (s.HostUserId != _currentUser.UserId.Value && s.ParticipantUserId != _currentUser.UserId.Value)
-            return Result<SwapSessionDTO>.Failure("Forbidden");
+            return Result<SwapSessionDTO>.Failure("You do not have permission to access this session.");
 
         return Result<SwapSessionDTO>.Success(new SwapSessionDTO
         {
@@ -53,7 +53,8 @@ public class GetSessionByIdQueryHandler : IRequestHandler<GetSessionByIdQuery, R
             Status = s.Status,
             HostConfirmedCompleted = s.HostConfirmedCompleted,
             ParticipantConfirmedCompleted = s.ParticipantConfirmedCompleted,
-            CompletedAt = s.CompletedAt
+            CompletedAt = s.CompletedAt,
+            HasCurrentUserReviewed = await _context.Reviews.AnyAsync(r => r.SessionId == s.Id && r.ReviewerId == _currentUser.UserId.Value && !r.IsDeleted, cancellationToken)
         });
     }
 }

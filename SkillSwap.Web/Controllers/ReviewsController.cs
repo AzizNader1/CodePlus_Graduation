@@ -21,7 +21,7 @@ public class ReviewsController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["Error"] = "Please fill in all review details.";
+            TempData["Error"] = "Please complete all rating criteria (Punctuality, Communication, Knowledge) and add a short comment.";
             return RedirectToAction("Index", "Sessions");
         }
 
@@ -29,7 +29,7 @@ public class ReviewsController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to submit review.";
+            TempData["Error"] = response?.Message ?? "We couldn't submit your review right now. Please try again in a few moments.";
         }
         else
         {

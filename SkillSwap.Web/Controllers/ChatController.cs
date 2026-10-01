@@ -52,7 +52,7 @@ public class ChatController : Controller
 
         if (response == null || !response.IsSuccess)
         {
-            TempData["Error"] = response?.Message ?? "Failed to send message.";
+            TempData["Error"] = response?.Message ?? "We couldn't deliver your message right now. Please check your connection and try again.";
         }
 
         return RedirectToAction("Index", new { conversationId });

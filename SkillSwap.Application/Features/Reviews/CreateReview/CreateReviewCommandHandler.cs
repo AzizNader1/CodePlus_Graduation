@@ -28,7 +28,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
     public async Task<Result<ReviewDTO>> Handle(CreateReviewCommand command, CancellationToken cancellationToken)
     {
         if (_currentUser.UserId == null)
-            return Result<ReviewDTO>.Failure("Unauthorized");
+            return Result<ReviewDTO>.Failure("Please sign in to leave a review.");
 
         var req = command.Request;
         var session = await _context.SwapSessions
@@ -37,14 +37,14 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
             .FirstOrDefaultAsync(s => s.Id == req.SessionId && !s.IsDeleted, cancellationToken);
 
         if (session == null)
-            return Result<ReviewDTO>.Failure("Swap session not found.");
+            return Result<ReviewDTO>.Failure("We couldn't locate this swap session.");
 
         if (session.Status != SessionStatus.Completed)
-            return Result<ReviewDTO>.Failure("You can only review a completed session.");
+            return Result<ReviewDTO>.Failure("Reviews can only be submitted once the session has been completed by both partners.");
 
         var reviewerId = _currentUser.UserId.Value;
         if (session.HostUserId != reviewerId && session.ParticipantUserId != reviewerId)
-            return Result<ReviewDTO>.Failure("Forbidden");
+            return Result<ReviewDTO>.Failure("You can only review swap sessions that you participated in.");
 
         var revieweeId = session.HostUserId == reviewerId ? session.ParticipantUserId : session.HostUserId;
 
@@ -52,7 +52,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
             .FirstOrDefaultAsync(r => r.SessionId == session.Id && r.ReviewerId == reviewerId && !r.IsDeleted, cancellationToken);
 
         if (existing != null)
-            return Result<ReviewDTO>.Failure("You have already submitted a review for this session.");
+            return Result<ReviewDTO>.Failure("You have already submitted your review for this session. Thank you for your feedback!");
 
         var review = new Review
         {

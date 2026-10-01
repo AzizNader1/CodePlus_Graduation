@@ -31,7 +31,7 @@ public class PaymentsController : Controller
     {
         if (amount <= 0)
         {
-            TempData["Error"] = "Deposit amount must be greater than zero.";
+            TempData["Error"] = "Please enter a deposit amount greater than $0.";
             return RedirectToAction("Index");
         }
 
@@ -40,7 +40,7 @@ public class PaymentsController : Controller
 
         if (response == null || !response.IsSuccess || response.Data == null)
         {
-            TempData["Error"] = response?.Message ?? "Failed to initiate Stripe checkout.";
+            TempData["Error"] = response?.Message ?? "We couldn't open the secure payment checkout right now. Please try again.";
             return RedirectToAction("Index");
         }
 
@@ -57,7 +57,7 @@ public class PaymentsController : Controller
 
         if (response == null || !response.IsSuccess || response.Data == null)
         {
-            TempData["Error"] = response?.Message ?? "Failed to initiate subscription checkout.";
+            TempData["Error"] = response?.Message ?? "We couldn't open the subscription upgrade page right now. Please try again.";
             return RedirectToAction("Index");
         }
 
