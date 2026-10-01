@@ -214,7 +214,7 @@
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 @if (!string.IsNullOrEmpty(swapper.AvatarUrl))
                                 {
-                                    <img src="http://localhost:5200@(swapper.AvatarUrl)" alt="@swapper.FullName" class="avatar-circle" style="width:52px; height:52px;" onerror="this.src='/images/default-avatar.png';">
+                                    <img src="@swapper.AvatarUrl.ToAvatarUrl()" alt="@swapper.FullName" class="avatar-circle" style="width:52px; height:52px;" onerror="this.src='/images/default-avatar.svg';">
                                 }
                                 else
                                 {

@@ -47,8 +47,29 @@ public class ProfileController : ApiControllerBase
         if (!allowedExtensions.Contains(extension))
             return BadRequest(ApiResponse<object>.Failure("Only image files (.jpg, .jpeg, .png, .webp) are allowed."));
 
+        var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/webp", "image/pjpeg", "image/x-png" };
+        if (!allowedContentTypes.Contains(file.ContentType.ToLowerInvariant()))
+            return BadRequest(ApiResponse<object>.Failure("Invalid image content type."));
+
         if (file.Length > 5 * 1024 * 1024)
             return BadRequest(ApiResponse<object>.Failure("File size exceeds 5MB limit."));
+
+        // Validate image magic bytes
+        byte[] header = new byte[12];
+        using (var reader = file.OpenReadStream())
+        {
+            var bytesRead = await reader.ReadAsync(header, 0, header.Length);
+            if (bytesRead < 4)
+                return BadRequest(ApiResponse<object>.Failure("Invalid file content."));
+
+            bool isJpeg = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
+            bool isPng = header[0] == 0x89 && header[1] == 0x50 && header[2] == 0x4E && header[3] == 0x47;
+            bool isWebp = bytesRead >= 12 && header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x46 && header[3] == 0x46 &&
+                          header[8] == 0x57 && header[9] == 0x45 && header[10] == 0x42 && header[11] == 0x50;
+
+            if (!isJpeg && !isPng && !isWebp)
+                return BadRequest(ApiResponse<object>.Failure("File header signature does not match a valid image format."));
+        }
 
         var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "avatars");
         if (!Directory.Exists(uploadsFolder))

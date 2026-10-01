@@ -33,7 +33,7 @@
                                asp-action="Index" asp-route-conversationId="@c.Id">
                                 @if (!string.IsNullOrEmpty(c.PartnerAvatarUrl))
                                 {
-                                    <img src="http://localhost:5200@(c.PartnerAvatarUrl)" alt="@c.PartnerName" class="avatar-circle" style="width:44px; height:44px;" onerror="this.src='/images/default-avatar.png';">
+                                    <img src="@c.PartnerAvatarUrl.ToAvatarUrl()" alt="@c.PartnerName" class="avatar-circle" style="width:44px; height:44px;" onerror="this.src='/images/default-avatar.svg';">
                                 }
                                 else
                                 {
@@ -69,7 +69,7 @@
                         <div class="d-flex align-items-center gap-3">
                             @if (!string.IsNullOrEmpty(activeConvo.PartnerAvatarUrl))
                             {
-                                <img src="http://localhost:5200@(activeConvo.PartnerAvatarUrl)" alt="@activeConvo.PartnerName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.png';">
+                                <img src="@activeConvo.PartnerAvatarUrl.ToAvatarUrl()" alt="@activeConvo.PartnerName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.svg';">
                             }
                             else
                             {

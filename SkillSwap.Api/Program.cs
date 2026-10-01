@@ -1,4 +1,7 @@
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.OpenApi.Models;
 using SkillSwap.Api.Data;
 using SkillSwap.Api.Middlewares;
@@ -9,11 +12,19 @@ using SkillSwap.Infrastructure.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Add Clean Architecture Layers
+// 1. Forwarded Headers for MonsterASP / Reverse Proxy Hosting
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
+// 2. Add Clean Architecture Layers
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-// 2. Add API Controllers & JSON Serialization
+// 3. Add API Controllers & JSON Serialization
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -38,19 +49,76 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     };
 });
 
-// 3. Add CORS Policy (Permissive for development & mobile testing)
+// 4. Enterprise Rate Limiting Protection (Anti-Brute Force & Anti-DDoS)
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    // Global sliding window: 150 requests per minute per IP
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+    {
+        var clientIp = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetSlidingWindowLimiter(clientIp, _ => new SlidingWindowRateLimiterOptions
+        {
+            PermitLimit = 150,
+            Window = TimeSpan.FromMinutes(1),
+            SegmentsPerWindow = 6,
+            QueueLimit = 10,
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+        });
+    });
+
+    // Strict limiter for authentication endpoints: 15 requests per minute
+    options.AddPolicy("AuthRateLimit", context =>
+    {
+        var clientIp = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 15,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 2
+        });
+    });
+});
+
+// 5. Hardened Production CORS Policy
+var configuredOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? new[] { "https://skillswapwebsite.runasp.net", "http://skillswapwebsite.runasp.net" };
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("ProductionCorsPolicy", policy =>
     {
-        policy.SetIsOriginAllowed(_ => true)
+        policy.WithOrigins(configuredOrigins)
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
     });
+
+    options.AddPolicy("DevelopmentCorsPolicy", policy =>
+    {
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrWhiteSpace(origin)) return false;
+            if (configuredOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase)) return true;
+            if (Uri.TryCreate(origin, UriKind.Absolute, out var uri) && uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase)) return true;
+            return false;
+        })
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+    });
 });
 
-// 4. Configure Swagger / OpenAPI with JWT Authorization Support
+// 6. HSTS Security
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(365);
+});
+
+// 7. Configure Swagger / OpenAPI with JWT Authorization Support
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -89,7 +157,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// 5. Automatic Database Migration & Seeding
+// 8. Automatic Database Migration & Seeding
 using (var scope = app.Services.CreateScope())
 {
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
@@ -105,24 +173,37 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// 6. HTTP Pipeline Middlewares
+// 9. Reverse Proxy Forwarding
+app.UseForwardedHeaders();
+
+// 10. HTTP Pipeline Middlewares & Enterprise Defenses
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseApiSecurityHeaders();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skill Swap API v1");
-    c.RoutePrefix = string.Empty; // Swagger UI served at application root (http://localhost:5000/)
+    c.RoutePrefix = string.Empty;
 });
 
-app.UseCors("AllowAll");
+app.UseCors(app.Environment.IsDevelopment() ? "DevelopmentCorsPolicy" : "ProductionCorsPolicy");
+
+app.UseRateLimiter();
 
 app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 7. Route Endpoints & SignalR Hubs
+// 11. Route Endpoints & SignalR Hubs
 app.MapControllers();
 app.MapHub<ChatHub>("/hubs/chat");
 app.MapHub<NotificationHub>("/hubs/notifications");

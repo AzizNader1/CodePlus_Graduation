@@ -53,7 +53,7 @@
                             <div class="d-flex align-items-center gap-2">
                                 @if (!string.IsNullOrEmpty(session.HostAvatarUrl))
                                 {
-                                    <img src="http://localhost:5200@(session.HostAvatarUrl)" alt="@session.HostName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.png';">
+                                    <img src="@session.HostAvatarUrl.ToAvatarUrl()" alt="@session.HostName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.svg';">
                                 }
                                 else
                                 {
@@ -74,7 +74,7 @@
                                 </div>
                                 @if (!string.IsNullOrEmpty(session.ParticipantAvatarUrl))
                                 {
-                                    <img src="http://localhost:5200@(session.ParticipantAvatarUrl)" alt="@session.ParticipantName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.png';">
+                                    <img src="@session.ParticipantAvatarUrl.ToAvatarUrl()" alt="@session.ParticipantName" class="avatar-circle" style="width:40px; height:40px;" onerror="this.src='/images/default-avatar.svg';">
                                 }
                                 else
                                 {

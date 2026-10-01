@@ -156,16 +156,17 @@
             document.getElementById('callDurationTimer').innerText = `${hrs}:${mins}:${secs}`;
         }, 1000);
 
-        // 3. Telemetry Heartbeat (pings API every 30 seconds)
+        // 3. Telemetry Heartbeat (pings API via Web proxy every 30 seconds)
         setInterval(async () => {
             try {
-                await fetch(`http://localhost:5200/api/v1/Sessions/Heartbeat/${sessionId}`, {
+                const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+                await fetch(`/Sessions/Heartbeat?sessionId=${sessionId}`, {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer @User.FindFirst("AccessToken")?.Value'
+                        'RequestVerificationToken': token
                     },
-                    body: JSON.stringify({ inCall: true, timestamp: new Date().toISOString() })
+                    body: JSON.stringify({ isAudioMuted: isAudioMuted, isVideoMuted: isVideoOff, isScreenSharing: false })
                 });
                 document.getElementById('heartbeatStatus').innerText = 'Synced ' + new Date().toLocaleTimeString();
             } catch (e) {

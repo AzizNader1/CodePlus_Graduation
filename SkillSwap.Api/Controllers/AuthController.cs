@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using SkillSwap.Application.DTOs;
 using SkillSwap.Application.Features.Auth;
 
 namespace SkillSwap.Api.Controllers;
 
+[EnableRateLimiting("AuthRateLimit")]
 public class AuthController : ApiControllerBase
 {
     [HttpPost]

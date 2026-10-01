@@ -54,7 +54,7 @@
                                     <div class="d-flex align-items-center gap-3">
                                         @if (!string.IsNullOrEmpty(swap.RequesterAvatarUrl))
                                         {
-                                            <img src="http://localhost:5200@(swap.RequesterAvatarUrl)" alt="@swap.RequesterName" class="avatar-circle" style="width:48px; height:48px;" onerror="this.src='/images/default-avatar.png';">
+                                            <img src="@swap.RequesterAvatarUrl.ToAvatarUrl()" alt="@swap.RequesterName" class="avatar-circle" style="width:48px; height:48px;" onerror="this.src='/images/default-avatar.svg';">
                                         }
                                         else
                                         {
@@ -201,7 +201,7 @@
                                     <div class="d-flex align-items-center gap-3">
                                         @if (!string.IsNullOrEmpty(swap.ReceiverAvatarUrl))
                                         {
-                                            <img src="http://localhost:5200@(swap.ReceiverAvatarUrl)" alt="@swap.ReceiverName" class="avatar-circle" style="width:48px; height:48px;" onerror="this.src='/images/default-avatar.png';">
+                                            <img src="@swap.ReceiverAvatarUrl.ToAvatarUrl()" alt="@swap.ReceiverName" class="avatar-circle" style="width:48px; height:48px;" onerror="this.src='/images/default-avatar.svg';">
                                         }
                                         else
                                         {

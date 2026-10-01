@@ -101,7 +101,7 @@
                                     }
                                     @if (!string.IsNullOrEmpty(avatar))
                                     {
-                                        <img src="http://localhost:5200@(avatar)" alt="@name" class="avatar-circle" style="width:32px; height:32px;" onerror="this.src='/images/default-avatar.png';">
+                                        <img src="@avatar.ToAvatarUrl()" alt="@name" class="avatar-circle" style="width:32px; height:32px;" onerror="this.src='/images/default-avatar.svg';">
                                     }
                                     else
                                     {

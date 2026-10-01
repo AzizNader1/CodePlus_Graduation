@@ -24,4 +24,3 @@ C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\Skill
 C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Domain\obj\Debug\net8.0\refint\SkillSwap.Domain.dll
 C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Domain\obj\Debug\net8.0\SkillSwap.Domain.pdb
 C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Domain\obj\Debug\net8.0\ref\SkillSwap.Domain.dll
-C:\Users\azizn\OneDrive\Desktop\Code Plus Sessions\New\CodePlus_Graduation\SkillSwap.Domain\obj\Debug\net8.0\SkillSwa.6E8FBD4E.Up2Date

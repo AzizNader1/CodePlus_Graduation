@@ -9,7 +9,7 @@
             <div class="col-md-auto text-center">
                 @if (!string.IsNullOrEmpty(Model.AvatarUrl))
                 {
-                    <img src="http://localhost:5200@(Model.AvatarUrl)" alt="@Model.FullName" class="avatar-lg" style="width:110px; height:110px;" onerror="this.src='/images/default-avatar.png';">
+                    <img src="@Model.AvatarUrl.ToAvatarUrl()" alt="@Model.FullName" class="avatar-lg" style="width:110px; height:110px;" onerror="this.src='/images/default-avatar.svg';">
                 }
                 else
                 {

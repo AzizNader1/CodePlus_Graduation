@@ -102,4 +102,12 @@ public class SessionsController : Controller
 
         return RedirectToAction("Index");
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Heartbeat(Guid sessionId, [FromBody] SessionHeartbeatRequest? request)
+    {
+        var response = await _apiClient.PostCommandAsync($"Sessions/Heartbeat/{sessionId}", request ?? new SessionHeartbeatRequest());
+        return Json(new { success = response?.IsSuccess ?? false });
+    }
 }

@@ -56,7 +56,7 @@
                         <div class="d-flex align-items-center gap-3 mb-4">
                             @if (!string.IsNullOrEmpty(partner.AvatarUrl))
                             {
-                                <img src="http://localhost:5200@(partner.AvatarUrl)" alt="@partner.FullName" class="avatar-circle" style="width:60px; height:60px;" onerror="this.src='/images/default-avatar.png';">
+                                <img src="@partner.AvatarUrl.ToAvatarUrl()" alt="@partner.FullName" class="avatar-circle" style="width:60px; height:60px;" onerror="this.src='/images/default-avatar.svg';">
                             }
                             else
                             {
