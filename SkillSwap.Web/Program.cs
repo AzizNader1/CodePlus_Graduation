@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -7,6 +8,9 @@ using SkillSwap.Web.Middlewares;
 using SkillSwap.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load private local configurations if available (ignored by git)
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 
 // 1. Forwarded Headers for MonsterASP / Reverse Proxy Hosting
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
@@ -22,11 +26,15 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 });
 
+var cookieSecurePolicy = builder.Environment.IsDevelopment()
+    ? CookieSecurePolicy.SameAsRequest
+    : CookieSecurePolicy.Always;
+
 // 3. Antiforgery Cookie Security
 builder.Services.AddAntiforgery(options =>
 {
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SecurePolicy = cookieSecurePolicy;
     options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
@@ -39,13 +47,17 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromHours(8);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SecurePolicy = cookieSecurePolicy;
     options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
-// 5. Secure Cookie Authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+// 5. Secure Cookie Authentication & External OAuth Providers
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.LoginPath = "/Auth/Login";
         options.LogoutPath = "/Auth/Logout";
@@ -53,14 +65,40 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
         options.SlidingExpiration = true;
         options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SecurePolicy = cookieSecurePolicy;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+    })
+    .AddCookie("ExternalAuth", options =>
+    {
+        options.Cookie.Name = ".SkillSwap.ExternalAuth";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = cookieSecurePolicy;
         options.Cookie.SameSite = SameSiteMode.Lax;
     })
     .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
     {
+        options.SignInScheme = "ExternalAuth";
         options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "placeholder";
         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "placeholder";
         options.SaveTokens = true;
+        options.Events.OnCreatingTicket = ctx =>
+        {
+            if (ctx.TokenResponse?.Response != null &&
+                ctx.TokenResponse.Response.RootElement.ValueKind == System.Text.Json.JsonValueKind.Object &&
+                ctx.TokenResponse.Response.RootElement.TryGetProperty("id_token", out var idTokenElement))
+            {
+                var idToken = idTokenElement.GetString();
+                if (!string.IsNullOrEmpty(idToken) && ctx.Properties != null)
+                {
+                    var tokens = ctx.Properties.GetTokens().ToList();
+                    tokens.RemoveAll(t => t.Name == "id_token");
+                    tokens.Add(new AuthenticationToken { Name = "id_token", Value = idToken });
+                    ctx.Properties.StoreTokens(tokens);
+                }
+            }
+            return Task.CompletedTask;
+        };
     });
 
 // 6. HSTS Security for Production

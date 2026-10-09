@@ -34,13 +34,17 @@ public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommand, Res
             return Result<AuthResponseDTO>.Failure("Invalid Google ID Token.");
 
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == payload.Email || u.GoogleId == payload.GoogleId, cancellationToken);
+        var effectiveName = !string.IsNullOrWhiteSpace(payload.Name) 
+            ? payload.Name 
+            : (!string.IsNullOrWhiteSpace(payload.Email) ? payload.Email.Split('@')[0] : "Google User");
+
         if (user == null)
         {
             user = new ApplicationUser
             {
                 Email = payload.Email,
                 UserName = payload.Email,
-                FullName = payload.Name,
+                FullName = effectiveName,
                 AvatarUrl = payload.Picture,
                 GoogleId = payload.GoogleId,
                 EmailConfirmed = true,
@@ -56,6 +60,8 @@ public class GoogleLoginCommandHandler : IRequestHandler<GoogleLoginCommand, Res
             if (string.IsNullOrEmpty(user.SecurityStamp))
                 user.SecurityStamp = Guid.NewGuid().ToString();
             user.GoogleId = payload.GoogleId;
+            if (string.IsNullOrEmpty(user.FullName))
+                user.FullName = effectiveName;
             if (string.IsNullOrEmpty(user.AvatarUrl) && !string.IsNullOrEmpty(payload.Picture))
                 user.AvatarUrl = payload.Picture;
         }

@@ -1,5 +1,0 @@
-wwwroot\avatars\f98ff3d4-0f4b-4407-b470-c64026da090e_58134154f3374a5ea1408d224c2773c6.png
-wwwroot\avatars\f98ff3d4-0f4b-4407-b470-c64026da090e_5ece7992f9d042af97d9fbef3a46ad75.png
-wwwroot\avatars\f98ff3d4-0f4b-4407-b470-c64026da090e_9a93b8b18c204138bd6385ac4a2b2d66.png
-wwwroot\avatars\f98ff3d4-0f4b-4407-b470-c64026da090e_abdd931542974f7c9932f7d3f3d63f78.png
-wwwroot\avatars\f98ff3d4-0f4b-4407-b470-c64026da090e_fe0f9339b70a482b9d3d7ab1d28a2f43.png

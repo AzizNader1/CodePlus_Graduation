@@ -12,6 +12,9 @@ using SkillSwap.Infrastructure.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load private local configurations if available (ignored by git)
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+
 // 1. Forwarded Headers for MonsterASP / Reverse Proxy Hosting
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {

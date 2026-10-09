@@ -1,0 +1,29 @@
+## Visual Studio / VS Code
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Publish outputs
+PubTmp/
+Publish/
+
+## Sensitive / Local Configurations
+appsettings.Local.json
+*.local.json
+secrets.json
+
+## OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store

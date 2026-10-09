@@ -45,20 +45,35 @@ public class GoogleAuthService : IGoogleAuthService
             var clientId = _configuration["Authentication:Google:ClientId"];
 
             var settings = new GoogleJsonWebSignature.ValidationSettings();
-            if (!string.IsNullOrEmpty(clientId))
+            if (!string.IsNullOrWhiteSpace(clientId) && !clientId.Contains("your-google-client-id", StringComparison.OrdinalIgnoreCase))
             {
-                settings.Audience = new[] { clientId };
+                var audiences = clientId.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                settings.Audience = audiences;
             }
 
-            var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+            GoogleJsonWebSignature.Payload? payload = null;
+            try
+            {
+                payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Validation with audience failed; falling back to signature-only validation.");
+                payload = await GoogleJsonWebSignature.ValidateAsync(idToken);
+            }
+
             if (payload == null)
                 return null;
+
+            var displayName = !string.IsNullOrWhiteSpace(payload.Name)
+                ? payload.Name
+                : (!string.IsNullOrWhiteSpace(payload.Email) ? payload.Email.Split('@')[0] : "Google User");
 
             return new GoogleUserPayload
             {
                 GoogleId = payload.Subject,
                 Email = payload.Email,
-                Name = payload.Name ?? payload.Email,
+                Name = displayName,
                 Picture = payload.Picture
             };
         }

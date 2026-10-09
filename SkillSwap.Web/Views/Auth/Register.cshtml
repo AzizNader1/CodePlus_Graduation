@@ -22,7 +22,7 @@
                     </div>
                 }
 
-                <form asp-action="Register" method="post">
+                <form asp-action="Register" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">Full Name</label>
                         <div class="input-group">
@@ -69,8 +69,51 @@
                     <button type="submit" class="btn btn-primary-custom w-100 py-2 mb-3">Create Free Account</button>
                 </form>
 
+                <div class="position-relative text-center my-3">
+                    <hr class="text-muted">
+                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 small text-muted">or continue with</span>
+                </div>
+
+                <div class="row g-2 mb-4">
+                    <div class="col-4">
+                        <form asp-action="GoogleRegister" method="get" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                            <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1"
+                                    type="submit"
+                                    id="btnGoogleRegister"
+                                    title="Sign up with Google">
+                                <i class="bi bi-google text-danger"></i>
+                                <span class="small fw-semibold d-none d-sm-inline">Google</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-4">
+                        <form asp-action="ExternalLogin" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                            <input type="hidden" name="provider" value="Apple" />
+                            <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1"
+                                    type="submit"
+                                    id="btnAppleRegister"
+                                    title="Sign up with Apple">
+                                <i class="bi bi-apple text-dark"></i>
+                                <span class="small fw-semibold d-none d-sm-inline">Apple</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-4">
+                        <form asp-action="ExternalLogin" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                            <input type="hidden" name="provider" value="Facebook" />
+                            <button class="btn btn-outline-secondary w-100 py-2 rounded-3 text-nowrap d-flex align-items-center justify-content-center gap-1"
+                                    type="submit"
+                                    id="btnFacebookRegister"
+                                    title="Sign up with Facebook">
+                                <i class="bi bi-facebook text-primary"></i>
+                                <span class="small fw-semibold d-none d-sm-inline">Facebook</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <p class="text-center small text-muted mb-0">
-                    Already have an account? <a asp-action="Login" class="fw-bold text-primary text-decoration-none">Sign in here</a>
+                    Already have an account? <a asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="fw-bold text-primary text-decoration-none">Sign in here</a>
                 </p>
             </div>
         </div>
